@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mario Maker 2 Level & Player Query</title>
+<style>
+*{font-family:system-ui, -apple-system, Helvetica Rounded, sans-serif;box-sizing:border-box;margin:0;padding:0;}
+body{background:linear-gradient(140deg,#ff3c38,#ffc107);min-height:100vh;padding:24px 16px;display:flex;justify-content:center;}
+.card{backdrop-filter:blur(10px);background:rgba(255,255,255,0.94);border-radius:24px;box-shadow:0 10px 25px rgba(0,0,0,0.1);width:100%;max-width:640px;padding:20px 24px;}
+h1{font-size:24px;font-weight:bold;color:#dc2626;text-align:center;margin-bottom:8px;}
+.sub-desc{text-align:center;color:#666;font-size:14px;margin-bottom:16px;}
+.status-box{margin-bottom:16px;padding:12px 16px;border-radius:12px;background:#fef3c7;color:#92400e;text-align:center;font-size:14px;}
+.status-green{background:#dcfce7;color:#166534;}
+.status-orange{background:#ffedd5;color:#9a3412;}
+.status-red{background:#fee2e2;color:#b91c1c;}
+.details-wrap{margin-bottom:20px;background:#f3f4f6;border-radius:12px;padding:12px;}
+details summary{font-weight:500;color:#444;cursor:pointer;}
+textarea{width:100%;margin-top:12px;padding:10px;border:1px solid #ddd;border-radius:8px;resize:none;min-height:80px;}
+.btn-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.btn-red{background:#ef4444;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;}
+.btn-red:hover{background:#dc2626;}
+.btn-amber{background:#f59e0b;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;}
+.btn-amber:hover{background:#d97706;}
+.btn-blue{background:#3b82f6;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;}
+.btn-blue:hover{background:#2563eb;}
+.btn-gray{background:#e5e7eb;color:#333;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;}
+.btn-gray:hover{background:#d1d5db;}
+.block-title{font-weight:500;color:#333;margin-bottom:8px;font-size:16px;}
+.gray-box{background:#f3f4f6;border-radius:12px;padding:16px;min-height:70px;margin-bottom:20px;}
+.empty-text{color:#999;font-size:14px;}
+.id-item{background:white;border:1px solid #ddd;border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.id-tag{font-family:"Consolas",monospace;letter-spacing:1px;font-weight:bold;color:#dc2626;}
+.info-card{border-left:4px solid #ef4444;background:#f3f4f6;border-radius:0 12px 12px 0;padding:16px;line-height:1.7;max-height:60vh;overflow-y:auto;}
+.api-hidden{display:none;}
+.history-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.clear-his{font-size:12px;color:#dc2626;border:none;background:transparent;cursor:pointer;}
+.history-item{background:white;border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.his-text{font-family:"Consolas",monospace;color:#444;cursor:pointer;}
+.flash-ok{animation:flashGreen 0.6s ease;}
+@keyframes flashGreen{0%{background:#bbf7d0}100%{background:transparent}}
+.link-text{color:#2563eb;text-decoration:none;}
+.link-text:hover{text-decoration:underline;}
+.user-input-row{display:flex;gap:8px;align-items:center;margin-top:12px;}
+#userInfoWrap{margin-bottom:20px;display:none;}
+input{flex:1;border:1px solid #ddd;border-radius:8px;padding:8px 12px;outline:none;}
+input:focus{border-color:#f59e0b;}
+.list-item{margin:4px 0;padding:4px;border-bottom:1px #ddd dashed;}
+hr{border:none;border-top:1px #ccc solid;margin:12px 0;}
+</style>
+</head>
+<body class="p-3 md:p-6 flex flex-col items-center">
+<div class="card">
+<h1>Mario Maker 2 Level & Player Query</h1>
+<p class="sub-desc">Auto uppercase ID, query all data in one click</p>
+
+<div id="statusBox" class="status-box">
+Enter ID and click Query or press Enter
+</div>
+
+<div class="details-wrap">
+<details open>
+<summary>Player Query</summary>
+<div class="user-input-row">
+<input id="makerInput" type="text" placeholder="Enter Player Maker ID">
+<button onclick="searchUser()" class="btn-blue">Search Player</button>
+<button onclick="clearUserInput()" class="btn-gray">Clear</button>
+</details>
+</div>
+
+<div id="userInfoWrap">
+<p class="block-title">👤 Full Player Information</p>
+<div id="userInfoBox" class="info-card"></div>
+</div>
+
+<div class="details-wrap">
+<details open>
+<summary>Level Input / Paste Clipboard</summary>
+<textarea id="textSource" rows="3" placeholder="Paste full Level ID XXX-XXX-XXX"></textarea>
+<div class="btn-row">
+<button onclick="scanAllText()" class="btn-amber">Execute Query</button>
+<button onclick="pasteClipboard()" class="btn-blue">Paste Clipboard</button>
+<button onclick="clearTextarea()" class="btn-gray">Clear</button>
+</details>
+</div>
+
+<div>
+<p class="block-title">Pending ID</p>
+<div id="resultBox" class="gray-box">
+<p class="empty-text">No ID Detected</p>
+</div>
+</div>
+
+<div id="apiInfoWrap" class="api-hidden">
+<p class="block-title">📊 Level Details</p>
+<div id="apiInfoBox" class="info-card"></div>
+</div>
+
+<div style="margin-top:20px;">
+<div class="history-head">
+<p class="block-title">Query History</p>
+<button onclick="clearAllHistory()" class="clear-his">Clear All</button>
+</div>
+<div id="historyBox" class="gray-box">
+<p class="empty-text">No Records</p>
+</div>
+</div>
+</div>
+
+<script>
+const API_BASE = "https://tgrcode.com/mm2";
+const USER_INFO = API_BASE + "/user_info";
+const GET_POSTED = API_BASE + "/get_posted";
+const GET_LIKED = API_BASE + "/get_liked";
+const GET_PLAYED = API_BASE + "/get_played";
+const GET_FIRST_CLEARED = API_BASE + "/get_first_cleared";
+const GET_WORLD_RECORD = API_BASE + "/get_world_record";
+const LEVEL_INFO = API_BASE + "/level_info";
+const THUMB_URL = API_BASE + "/level_entire_thumbnail";
+const ID_REG = /[0-9A-Z]{3}-[0-9A-Z]{3}-[0-9A-Z]{3}/gi;
+let history = JSON.parse(localStorage.getItem("smm2_query_history")) || [];
+
+const textSource = document.getElementById('textSource');
+const makerInput = document.getElementById('makerInput');
+const resultBox = document.getElementById('resultBox');
+const apiInfoWrap = document.getElementById("apiInfoWrap");
+const apiInfoBox = document.getElementById("apiInfoBox");
+const userInfoWrap = document.getElementById("userInfoWrap");
+const userInfoBox = document.getElementById("userInfoBox");
+const historyBox = document.getElementById('historyBox');
+const statusBox = document.getElementById('statusBox');
+
+renderHistory();
+
+async function pasteClipboard() {
+    try {
+        const clipText = await navigator.clipboard.readText();
+        textSource.value = clipText;
+        statusBox.className = "status-box status-green";
+        statusBox.innerText = "✅ Clipboard content loaded";
+    } catch (e) {
+        statusBox.className = "status-box status-red";
+        statusBox.innerText = "❌ Failed to read clipboard, paste manually";
+    }
+}
+
+function clearTextarea() {
+    textSource.value = "";
+    resultBox.innerHTML = "<p class='empty-text'>No ID Detected</p>";
+    apiInfoWrap.classList.add("api-hidden");
+    statusBox.className = "status-box";
+    statusBox.innerText = "Enter ID and click Query or press Enter";
+}
+
+function clearUserInput() {
+    makerInput.value = "";
+    userInfoWrap.style.display = "none";
+}
+
+function scanAllText() {
+    const raw = textSource.value;
+    const ids = extractIds(raw);
+    renderResult(ids);
+    if (ids.length > 0) {
+        statusBox.innerText = `🎉 Detected ID: ${ids[0]}, auto querying`;
+        statusBox.className = "status-box status-green flash-ok";
+        fetchLevelInfo(ids[0]);
+        saveHistory(ids[0]);
+    } else {
+        statusBox.innerText = "⚠️ No valid ID found, format: XXX-XXX-XXX";
+        statusBox.className = "status-box status-orange";
+        apiInfoWrap.classList.add("api-hidden");
+    }
+}
+
+function extractIds(text) {
+    const rawMatch = text.match(ID_REG) || [];
+    return [...new Set(rawMatch.map(s => s.toUpperCase()))];
+}
+
+function renderResult(ids) {
+    if (!ids || ids.length === 0) {
+        resultBox.innerHTML = "<p class='empty-text'>No ID Detected</p>";
+        return;
+    }
+    let html = "";
+    ids.forEach(id => {
+        html += `
+        <div class="id-item">
+            <span class="id-tag">${id}</span>
+            <div class="btn-row" style="margin-top:0;">
+                <button onclick="fetchLevelInfo('${id}')" class="btn-red" style="padding:4px 8px;font-size:12px;">View Details</button>
+                <button onclick="fillText('${id}')" class="btn-blue" style="padding:4px 8px;">Fill Input</button>
+            </div>`;
+    });
+    resultBox.innerHTML = html;
+}
+
+function fillText(id) {
+    textSource.value = id;
+}
+
+async function fetchLevelInfo(courseId) {
+    try {
+        const res = await fetch(`${LEVEL_INFO}/${courseId}`);
+        if (!res.ok) throw new Error("err");
+        const data = await res.json();
+        apiInfoWrap.classList.remove("api-hidden");
+        const fullImgUrl = `${THUMB_URL}/${courseId}`;
+        apiInfoBox.innerHTML = `
+        <p><span style="font-weight:bold;">Level ID: </span>${courseId}</p>
+        <p><span style="font-weight:bold;">Level Name: </span>${data.name || "No Name"}</p>
+        <p><span style="font-weight:bold;">Player ID: </span>${data.maker_id || "undefined"}</p>
+        <p><span style="font-weight:bold;">Total Plays: </span>${data.courses_played || "undefined"}</p>
+        <p><span style="font-weight:bold;">Likes / Boos: </span>${data.likes || 0} / ${data.dislikes || 0}</p>
+        <p><span style="font-weight:bold;">Clear Rate: </span>${data.clear_rate ? data.clear_rate + "%" : "undefined"}</p>
+        <p><span style="font-weight:bold;">Versus Stats: </span>Total ${data.battle_total || "undefined"}, Wins ${data.battle_win || "undefined"}</p>
+        <p><span style="font-weight:bold;">Full World Preview: </span><a href="${fullImgUrl}" target="_blank" class="link-text">${fullImgUrl}</p>
+        `;
+    } catch (err) {
+        apiInfoWrap.classList.remove("api-hidden");
+        apiInfoBox.innerHTML = `<p style="color:#dc2626;">Query Failed: Rate limited / API down / Network error</p>`;
+    }
+}
+
+function renderCourseList(rawData, title) {
+    const arr = Array.isArray(rawData) ? rawData : [];
+    if (arr.length === 0) return `<p><b>${title}: </b>No Data</p>`;
+    let html = `<p><b>${title} (Total ${arr.length}): </b></p>`;
+    arr.forEach(item => {
+        const cid = item.course_id ?? "Unknown ID";
+        const cName = item.name ?? "No Name";
+        const clike = item.likes ?? 0;
+        const clearRate = item.clear_rate_pretty ?? "N/A";
+        html += `<div class="list-item">ID: ${cid} | Name: ${cName} | Likes: ${clike} | Clear Rate: ${clearRate}</div>`;
+    });
+    return html;
+}
+
+async function searchUser() {
+    let mid = makerInput.value.trim().toUpperCase();
+    if (!mid) {
+        statusBox.innerText = "⚠️ Please input Player Maker ID";
+        statusBox.className = "status-box status-orange";
+        return;
+    }
+    statusBox.innerText = "⏳ Loading all player data";
+    statusBox.className = "status-box status-orange";
+    userInfoWrap.style.display = "block";
+    let userData = null;
+    let postedList = [];
+    let likedList = [];
+    let playedList = [];
+    let firstClearList = [];
+    let wrList = [];
+
+    try {
+        const r1 = await fetch(`${USER_INFO}/${mid}`);
+        if (r1.ok) userData = await r1.json();
+    } catch (e) {}
+    try {
+        const r2 = await fetch(`${GET_POSTED}/${mid}`);
+        if (r2.ok) { const res = await r2.json(); postedList = res.courses || []; }
+    } catch (e) {}
+    try {
+        const r3 = await fetch(`${GET_LIKED}/${mid}`);
+        if (r3.ok) { const res = await r3.json(); likedList = res.courses || []; }
+    } catch (e) {}
+    try {
+        const r4 = await fetch(`${GET_PLAYED}/${mid}`);
+        if (r4.ok) { const res = await r4.json(); playedList = res.courses || []; }
+    } catch (e) {}
+    try {
+        const r5 = await fetch(`${GET_FIRST_CLEARED}/${mid}`);
+        if (r5.ok) { const res = await r5.json(); firstClearList = res.courses || []; }
+    } catch (e) {}
+    try {
+        const r6 = await fetch(`${GET_WORLD_RECORD}/${mid}`);
+        if (r6.ok) { const res = await r6.json(); wrList = res.courses || []; }
+    } catch (e) {}
+
+    let html = "";
+    if (userData) {
+        const miiImg = userData.mii_image ?? "None";
+        const uploadTotal = userData.uploaded_levels ?? "No Data";
+        const makerPoint = userData.maker_points ?? 0;
+        const totalLike = userData.likes ?? "No Data";
+        const totalBoos = userData.boos ?? "No Data";
+        const totalPlay = userData.courses_played ?? "No Data";
+        const totalClear = userData.courses_cleared ?? "No Data";
+        const totalDeath = userData.courses_deaths ?? "No Data";
+        const versusRank = userData.versus_rank_name ?? "No Rank";
+        const totalBattle = Number(userData.versus_plays) || 0;
+        const battleWin = Number(userData.versus_won) || 0;
+        const battleLose = Number(userData.versus_lost) || 0;
+        const winRate = totalBattle === 0 ? "0.00%" : ((battleWin / totalBattle) * 100).toFixed(2) + "%";
+        const avgClearRate = userData.total_clear_rate ? userData.total_clear_rate + "%" : "No Stats";
+        const wrCount = userData.world_records ?? 0;
+        const firstClearCount = userData.first_clears ?? 0;
+        html += `
+        <p><span style="font-weight:bold;">Player ID: </span>${mid}</p>
+        <p><span style="font-weight:bold;">Player Name: </span>${userData.name || "No Name"}</p>
+        <p><span style="font-weight:bold;">Mii Avatar: </span><a href="${miiImg}" target="_blank" class="link-text">${miiImg}</a></p>
+        <p><span style="font-weight:bold;">Published Levels: </span>${uploadTotal}</p>
+        <p><span style="font-weight:bold;">Maker Points: </span>${makerPoint}</p>
+        <p><span style="font-weight:bold;">Total Likes: </span>${totalLike}</p>
+        <p><span style="font-weight:bold;">Total Boos: </span>${totalBoos}</p>
+        <p><span style="font-weight:bold;">Total Plays: </span>${totalPlay}</p>
+        <p><span style="font-weight:bold;">Total Clears: </span>${totalClear}</p>
+        <p><span style="font-weight:bold;">Total Deaths: </span>${totalDeath}</p>
+        <p><span style="font-weight:bold;">Versus Rank: </span>${versusRank}</p>
+        <p><span style="font-weight:bold;">Total Versus Matches: </span>${totalBattle}</p>
+        <p><span style="font-weight:bold;">Versus Wins: </span>${battleWin}</p>
+        <p><span style="font-weight:bold;">Versus Losses: </span>${battleLose}</p>
+        <p><span style="font-weight:bold;">Win Rate: </span>${winRate}</p>
+        <p><span style="font-weight:bold;">Global Avg Clear Rate: </span>${avgClearRate}</p>
+        <p><span style="font-weight:bold;">World Records Owned: </span>${wrCount}</p>
+        <p><span style="font-weight:bold;">First Clears Count: </span>${firstClearCount}</p>
+        <hr>
+        `;
+    } else {
+        html += `<p style="color:#c00;">Failed to load base player info</p><hr>`;
+    }
+    html += renderCourseList(postedList, "Published Levels");
+    html += "<hr>";
+    html += renderCourseList(likedList, "Liked Levels");
+    html += "<hr>";
+    html += renderCourseList(playedList, "Played Levels");
+    html += "<hr>";
+    html += renderCourseList(firstClearList, "First Cleared Levels");
+    html += "<hr>";
+    html += renderCourseList(wrList, "World Record Levels");
+
+    userInfoBox.innerHTML = html;
+    statusBox.innerText = "✅ All player data loaded";
+    statusBox.className = "status-box status-green flash-ok";
+}
+
+function saveHistory(id) {
+    if (!history.includes(id)) {
+        history.unshift(id);
+        if (history.length > 15) history.pop();
+        localStorage.setItem("smm2_query_history", JSON.stringify(history));
+        renderHistory();
+    }
+}
+function renderHistory() {
+    if (history.length === 0) {
+        historyBox.innerHTML = "<p class='empty-text'>No Records</p>";
+        return;
+    }
+    let html = "";
+    history.forEach(id => {
+        html += `
+        <div class="history-item">
+            <span class="his-text" onclick="fillText('${id}')">${id}</span>
+            <div class="btn-row" style="margin-top:0;">
+                <button onclick="fetchLevelInfo('${id}')" style="font-size:12px;color:#3b82f6;background:transparent;border:none;cursor:pointer;">Query</button>
+                <button onclick="delSingleHistory('${id}')" style="font-size:12px;color:#dc2626;background:transparent;border:none;cursor:pointer;">Delete</button>
+            </div>`;
+    });
+    historyBox.innerHTML = html;
+}
+function delSingleHistory(id) {
+    history = history.filter(i => i !== id);
+    localStorage.setItem("smm2_query_history");
+    renderHistory();
+}
+function clearAllHistory() {
+    history = [];
+    localStorage.removeItem("smm2_query_history");
+    renderHistory();
+}
+
+textSource.addEventListener("keydown", e=>{
+    if(e.key === "Enter") scanAllText();
+})
+makerInput.addEventListener("keydown", e=>{
+    if(e.key === "Enter") searchUser();
+})
+</script>
+</body>
+</html>
