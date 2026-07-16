@@ -7,7 +7,7 @@
 <style>
 *{font-family:system-ui, -apple-system, Helvetica Rounded, sans-serif;box-sizing:border-box;margin:0;padding:0;}
 body{background:linear-gradient(140deg,#ff3c38,#ffc107);min-height:100vh;padding:24px 16px;display:flex;justify-content:center;}
-.card{backdrop-filter:blur(10px);background:rgba(255,255,255,0.94);border-radius:24px;box-shadow:0 10px 25px rgba(0,0,0,0.1);width:100%;max-width:640px;padding:20px 24px;}
+.card{backdrop-filter:blur(10px);background:rgba(255,255,255,0.94);border-radius:24px;/* 删除卡片阴影 */width:100%;max-width:640px;padding:20px 24px;}
 h1{font-size:24px;font-weight:bold;color:#dc2626;text-align:center;margin-bottom:8px;}
 .sub-desc{text-align:center;color:#666;font-size:14px;margin-bottom:16px;}
 .status-box{margin-bottom:16px;padding:12px 16px;border-radius:12px;background:#fef3c7;color:#92400e;text-align:center;font-size:14px;}
@@ -18,16 +18,24 @@ h1{font-size:24px;font-weight:bold;color:#dc2626;text-align:center;margin-bottom
 details summary{font-weight:500;color:#444;cursor:pointer;}
 textarea{width:100%;margin-top:12px;padding:10px;border:1px solid #ddd;border-radius:8px;resize:none;min-height:80px;}
 .btn-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
-.btn-red{background:#ef4444;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;}
+.btn-red{background:#ef4444;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;text-decoration:none;display:inline-block;}
 .btn-red:hover{background:#dc2626;}
-.btn-amber{background:#f59e0b;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;}
+.btn-amber{background:#f59e0b;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;flex:1;}
 .btn-amber:hover{background:#d97706;}
-.btn-blue{background:#3b82f6;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;}
+.btn-blue{background:#3b82f6;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;flex:1;}
 .btn-blue:hover{background:#2563eb;}
 .btn-gray{background:#e5e7eb;color:#333;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;}
 .btn-gray:hover{background:#d1d5db;}
+.btn-long{width:100%;background:#ffffff;color:#222;border:1px solid #ddd;padding:10px;border-radius:8px;font-size:15px;cursor:pointer;margin-top:18px;}
+.btn-long:hover{background:#f7f7f7;}
 .block-title{font-weight:500;color:#333;margin-bottom:8px;font-size:16px;}
 .gray-box{background:#f3f4f6;border-radius:12px;padding:16px;min-height:70px;margin-bottom:20px;}
+#historyBox{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+    gap:10px;
+    background:transparent;
+}
 .empty-text{color:#999;font-size:14px;}
 .id-item{background:white;border:1px solid #ddd;border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
 .id-tag{font-family:"Consolas",monospace;letter-spacing:1px;font-weight:bold;color:#dc2626;}
@@ -35,7 +43,7 @@ textarea{width:100%;margin-top:12px;padding:10px;border:1px solid #ddd;border-ra
 .api-hidden{display:none;}
 .history-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
 .clear-his{font-size:12px;color:#dc2626;border:none;background:transparent;cursor:pointer;}
-.history-item{background:white;border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.history-item{background:white;border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;}
 .his-text{font-family:"Consolas",monospace;color:#444;cursor:pointer;}
 .flash-ok{animation:flashGreen 0.6s ease;}
 @keyframes flashGreen{0%{background:#bbf7d0}100%{background:transparent}}
@@ -47,17 +55,44 @@ input{flex:1;border:1px solid #ddd;border-radius:8px;padding:8px 12px;outline:no
 input:focus{border-color:#f59e0b;}
 .list-item{margin:4px 0;padding:4px;border-bottom:1px #ddd dashed;}
 hr{border:none;border-top:1px #ccc solid;margin:12px 0;}
+.tip-small{font-size:12px;color:#777;margin-top:6px;text-align:center;}
+.check-line{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-top:8px;
+    font-size:14px;
+    width:100%;
+    justify-content:center;
+}
+.check-line input[type="checkbox"]{
+    width:16px;
+    height:16px;
+    flex:none;
+    margin:0;
+}
+.check-line label{
+    flex:none;
+}
+.batch-tips{
+    font-size:12px;
+    color:#666;
+    margin:8px 0 0;
+    line-height:1.6;
+    background:none;
+    box-shadow:none;
+    border:none;
+    padding:0;
+}
 </style>
 </head>
 <body>
 <div class="card">
 <h1>马造2关卡/玩家查询</h1>
-<p class="sub-desc">ID自动大写，一键查询全部数据</p>
-
+<p class="sub-desc">可下载 *.bcd，一键查询全部数据</p>
 <div id="statusBox" class="status-box">
 输入ID后点击查询或回车
 </div>
-
 <div class="details-wrap">
 <details open>
 <summary>玩家查询</summary>
@@ -65,37 +100,56 @@ hr{border:none;border-top:1px #ccc solid;margin:12px 0;}
 <input id="makerInput" type="text" placeholder="输入玩家ID">
 <button onclick="searchUser()" class="btn-blue">查询玩家</button>
 <button onclick="clearUserInput()" class="btn-gray">清空</button>
+</div>
 </details>
 </div>
-
 <div id="userInfoWrap">
 <p class="block-title">👤 玩家完整信息</p>
 <div id="userInfoBox" class="info-card"></div>
 </div>
-
 <div class="details-wrap">
 <details open>
 <summary>关卡输入 / 剪贴板粘贴</summary>
-<textarea id="textSource" rows="3" placeholder="粘贴完整关卡ID XXX-XXX-XXX"></textarea>
+<textarea id="textSource" rows="3" placeholder="粘贴完整关卡ID XXX-XXX-XXX 或 9位纯字符"></textarea>
 <div class="btn-row">
 <button onclick="scanAllText()" class="btn-amber">执行查询</button>
 <button onclick="pasteClipboard()" class="btn-blue">粘贴剪贴板</button>
-<button onclick="clearTextarea()" class="btn-gray">清空</button>
+</div>
+<button onclick="clearTextarea()" class="btn-gray" style="width:100%;margin-top:12px;">清空</button>
+
+<button onclick="getRandomFiveLevels()" class="btn-long">我要打团</button>
+<p class="tip-small">一次随机抽取一个图(可下载)</p>
+
+<div class="check-line">
+<input type="checkbox" id="autoOpenTabCheck" checked>
+<label for="autoOpenTabCheck">抽取后下载</label>
+</div>
+<div class="check-line">
+<input type="checkbox" id="batch10Check">
+<label for="batch10Check">抽取后下载(10个)</label>
+</div>
+<div class="check-line">
+<input type="checkbox" id="batch100Check">
+<label for="batch100Check">实验性功能：下载100个</label>
+</div>
+<p class="batch-tips">
+如果下载的是.gz，解压后重命名加.bcd<br>
+如果下载的没有后缀，重命名加.bcd<br>
+如果没有下载请手动保存<br>
+关于实验性功能：下载100个会分10轮采集，每轮随机15~21秒间隔去重；全部收集完成后再串行下载，每6.5秒打开1个，避免瞬间大量请求api限流<br>
+一键添加.bcd后缀 1.打开<a href="https://rename.tools/zh/app" target="_blank">https://rename.tools/zh/app</a> 2.点击 添加规则-添加/插入-扩展名-添加文本-位置选择末尾-输入bcd-导入文件夹（文件夹中只能包括要修改的文件）-执行重命名
+</p>
 </details>
 </div>
-
 <div>
 <p class="block-title">待查询ID</p>
 <div id="resultBox" class="gray-box">
 <p class="empty-text">暂无识别ID</p>
 </div>
-</div>
-
 <div id="apiInfoWrap" class="api-hidden">
 <p class="block-title">📊 关卡详情</p>
 <div id="apiInfoBox" class="info-card"></div>
 </div>
-
 <div style="margin-top:20px;">
 <div class="history-head">
 <p class="block-title">查询历史</p>
@@ -106,7 +160,6 @@ hr{border:none;border-top:1px #ccc solid;margin:12px 0;}
 </div>
 </div>
 </div>
-
 <script>
 const API_BASE = "https://tgrcode.com/mm2";
 const USER_INFO = API_BASE + "/user_info";
@@ -117,9 +170,10 @@ const GET_FIRST_CLEARED = API_BASE + "/get_first_cleared";
 const GET_WORLD_RECORD = API_BASE + "/get_world_record";
 const LEVEL_INFO = API_BASE + "/level_info";
 const THUMB_URL = API_BASE + "/level_entire_thumbnail";
-const ID_REG = /[0-9A-Z]{3}-[0-9A-Z]{3}-[0-9A-Z]{3}/gi;
+const LEVEL_DATA = "https://tgrcode.com/mm2/level_data";
+const SEARCH_ENDLESS = API_BASE + "/search_endless_mode";
+const ID_REG = /[0-9A-Z]{9}|[0-9A-Z]{3}-[0-9A-Z]{3}-[0-9A-Z]{3}/gi;
 let history = JSON.parse(localStorage.getItem("smm2_query_history")) || [];
-
 const textSource = document.getElementById('textSource');
 const makerInput = document.getElementById('makerInput');
 const resultBox = document.getElementById('resultBox');
@@ -129,7 +183,9 @@ const userInfoWrap = document.getElementById("userInfoWrap");
 const userInfoBox = document.getElementById("userInfoBox");
 const historyBox = document.getElementById('historyBox');
 const statusBox = document.getElementById('statusBox');
-
+const autoOpenTabCheck = document.getElementById('autoOpenTabCheck');
+const batch10Check = document.getElementById('batch10Check');
+const batch100Check = document.getElementById('batch100Check');
 renderHistory();
 
 async function pasteClipboard() {
@@ -143,7 +199,6 @@ async function pasteClipboard() {
         statusBox.innerText = "❌ 读取剪贴板失败，请手动粘贴";
     }
 }
-
 function clearTextarea() {
     textSource.value = "";
     resultBox.innerHTML = "<p class='empty-text'>暂无识别ID</p>";
@@ -151,18 +206,17 @@ function clearTextarea() {
     statusBox.className = "status-box";
     statusBox.innerText = "输入ID后点击查询或回车";
 }
-
 function clearUserInput() {
     makerInput.value = "";
     userInfoWrap.style.display = "none";
 }
-
 function scanAllText() {
     const raw = textSource.value;
-    const ids = extractIds(raw);
+    let ids = extractIds(raw);
+    ids = ids.slice(0,5);
     renderResult(ids);
     if (ids.length > 0) {
-        statusBox.innerText = `🎉 识别到ID：${ids[0]}，自动查询`;
+        statusBox.innerText = `🎉 识别到${ids.length}个ID，优先查询第一个`;
         statusBox.className = "status-box status-green flash-ok";
         fetchLevelInfo(ids[0]);
         saveHistory(ids[0]);
@@ -172,12 +226,13 @@ function scanAllText() {
         apiInfoWrap.classList.add("api-hidden");
     }
 }
-
 function extractIds(text) {
     const rawMatch = text.match(ID_REG) || [];
-    return [...new Set(rawMatch.map(s => s.toUpperCase()))];
+    return [...new Set(rawMatch.map(s => {
+        const up = s.toUpperCase();
+        return up.length === 9 ? `${up.slice(0,3)}-${up.slice(3,6)}-${up.slice(6)}` : up;
+    }))];
 }
-
 function renderResult(ids) {
     if (!ids || ids.length === 0) {
         resultBox.innerHTML = "<p class='empty-text'>暂无识别ID</p>";
@@ -195,18 +250,97 @@ function renderResult(ids) {
     });
     resultBox.innerHTML = html;
 }
-
 function fillText(id) {
     textSource.value = id;
 }
-
+// 严格串行下载，每个间隔6秒，429改这里!!!!!!!!!!!!
+async function downloadQueue(idList) {
+    for(const fullId of idList){
+        const pure = fullId.replace(/-/g, "");
+        window.open(`${LEVEL_DATA}/${pure}`, "_blank");
+        await new Promise(resolve => setTimeout(resolve, 6500));
+    }
+}
+// 获取20~26随机等待秒，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，等待时间
+function getRandomWait(){
+    const min = 5000;
+    const max = 11000;
+    return Math.floor(Math.random() * (max - min) + min);
+}
+async function getRandomFiveLevels() {
+    statusBox.innerText = "⏳ 开始采集关卡";
+    statusBox.className = "status-box status-orange";
+    const uniqueIds = new Set();
+    let totalBatch = 1;
+    let maxPick = 1;
+    if(batch100Check.checked){
+        totalBatch = 10;
+        maxPick = 100;
+    }else if(batch10Check.checked){
+        totalBatch = 1;
+        maxPick = 10;
+    }
+    let stopFlag = false;
+    // 先完整采集全部批次
+    for(let batch=1; batch<=totalBatch; batch++){
+        if(stopFlag) break;
+        try{
+            const res = await fetch(SEARCH_ENDLESS);
+            if(res.status === 429){
+                statusBox.innerText = `第${batch}批触发限流，停止采集，已收集${uniqueIds.size}个`;
+                statusBox.className = "status-box status-red";
+                stopFlag = true;
+                break;
+            }
+            if(!res.ok) throw new Error("接口异常");
+            const data = await res.json();
+            const list = data.courses || [];
+            list.forEach(item=>{
+                const raw = item.course_id;
+                const fmt = `${raw.slice(0,3)}-${raw.slice(3,6)}-${raw.slice(6)}`;
+                uniqueIds.add(fmt);
+            });
+            statusBox.innerText = `第${batch}批完成，已去重${uniqueIds.size}个`;
+            if(batch < totalBatch){
+                const waitMs = getRandomWait();
+                const sec = (waitMs / 1000).toFixed(1);
+                statusBox.innerText += `，等待${sec}秒下一批`;
+                await new Promise(r=>setTimeout(r, waitMs));
+            }
+        }catch(err){
+            statusBox.innerText = `第${batch}批出错：${err.message}，停止采集`;
+            statusBox.className = "status-box status-red";
+            stopFlag = true;
+            break;
+        }
+    }
+    // 截取上限数量
+    let picked = Array.from(uniqueIds).slice(0, maxPick);
+    textSource.value = picked.join("\n");
+    scanAllText();
+    statusBox.innerText = `✅ 采集完毕，共${picked.length}个关卡ID`;
+    statusBox.className = "status-box status-green flash-ok";
+    // 勾选任意下载框才执行下载
+    if(autoOpenTabCheck.checked || batch10Check.checked || batch100Check.checked){
+        statusBox.innerText = `⏳ 开始串行下载，每6.5秒打开1个`;
+        await downloadQueue(picked);
+        statusBox.innerText = `✅ 全部下载链接发起完毕`;
+    }
+}
 async function fetchLevelInfo(courseId) {
+    const pureId = courseId.replace(/-/g,"");
     try {
-        const res = await fetch(`${LEVEL_INFO}/${courseId}`);
+        const res = await fetch(`${LEVEL_INFO}/${pureId}`);
+        if (res.status === 429) {
+            apiInfoWrap.classList.remove("api-hidden");
+            apiInfoBox.innerHTML = `<p style="color:#dc2626;">429请求限流，间隔一段时间再查询</p>`;
+            return;
+        }
         if (!res.ok) throw new Error("err");
         const data = await res.json();
         apiInfoWrap.classList.remove("api-hidden");
-        const fullImgUrl = `${THUMB_URL}/${courseId}`;
+        const fullImgUrl = `${THUMB_URL}/${pureId}`;
+        const gzDownloadUrl = `${LEVEL_DATA}/${pureId}`;
         apiInfoBox.innerHTML = `
         <p><span style="font-weight:bold;">关卡ID：</span>${courseId}</p>
         <p><span style="font-weight:bold;">关卡名称：</span>${data.name || "无名称"}</p>
@@ -215,18 +349,26 @@ async function fetchLevelInfo(courseId) {
         <p><span style="font-weight:bold;">点赞 / 踩：</span>${data.likes || 0} / ${data.dislikes || 0}</p>
         <p><span style="font-weight:bold;">通关率：</span>${data.clear_rate ? data.clear_rate + "%" : "暂无数据"}</p>
         <p><span style="font-weight:bold;">对战数据：</span>总场次 ${data.battle_total || "暂无数据"}，胜利 ${data.battle_win || "暂无数据"}</p>
-        <p><span style="font-weight:bold;">表世界全景大图：</span><a href="${fullImgUrl}" target="_blank" class="link-text">${fullImgUrl}</p>
+        <p><span style="font-weight:bold;">表世界大图：</span><a href="${fullImgUrl}" target="_blank" class="link-text">${fullImgUrl}</a></p>
+        <hr>
+        <p style="font-weight:bold;color:#222;text-align:center;">测试版功能</p>
+        <div style="margin:12px 0;text-align:center;">
+            <a href="${gzDownloadUrl}" target="_blank" class="btn-red">关卡文件下载</a>
+        </p>
+        <p style="font-size:13px;color:#777;line-height:1.6;">
+            ❶ 苹果打开直接下载，文件后缀手动改成.bcd<br>
+            ❷ Windows/安卓下载gz解压后重命名.bcd<br>
+        </p>
         `;
     } catch (err) {
         apiInfoWrap.classList.remove("api-hidden");
         apiInfoBox.innerHTML = `<p style="color:#dc2626;">查询过快/api失效/网络错误</p>`;
     }
 }
-
-function renderCourseList(rawData, title) {
+function renderCourseList(rawData) {
     const arr = Array.isArray(rawData) ? rawData : [];
-    if (arr.length === 0) return `<p><b>${title}：</b>暂无数据</p>`;
-    let html = `<p><b>${title}（共${arr.length}个）：</b></p>`;
+    if (arr.length === 0) return `<p><b>暂无数据</b></p>`;
+    let html = "";
     arr.forEach(item => {
         const cid = item.course_id ?? "未知ID";
         const cName = item.name ?? "无名称";
@@ -236,7 +378,6 @@ function renderCourseList(rawData, title) {
     });
     return html;
 }
-
 async function searchUser() {
     let mid = makerInput.value.trim().toUpperCase();
     if (!mid) {
@@ -253,9 +394,12 @@ async function searchUser() {
     let playedList = [];
     let firstClearList = [];
     let wrList = [];
-
     try {
         const r1 = await fetch(`${USER_INFO}/${mid}`);
+        if(r1.status === 429){
+            userInfoBox.innerHTML = `<p style="color:#dc2626;">429限流，稍后再查玩家数据</p>`;
+            return;
+        }
         if (r1.ok) userData = await r1.json();
     } catch (e) {}
     try {
@@ -278,7 +422,6 @@ async function searchUser() {
         const r6 = await fetch(`${GET_WORLD_RECORD}/${mid}`);
         if (r6.ok) { const res = await r6.json(); wrList = res.courses || []; }
     } catch (e) {}
-
     let html = "";
     if (userData) {
         const miiImg = userData.mii_image ?? "无";
@@ -317,25 +460,23 @@ async function searchUser() {
         <p><span style="font-weight:bold;">拥有世界纪录：</span>${wrCount}个</p>
         <p><span style="font-weight:bold;">首通记录总数：</span>${firstClearCount}个</p>
         <hr>
+        <p><b>发布的关卡</b></p>${renderCourseList(postedList)}
+        <hr>
+        <p><b>点赞过的关卡</b></p>${renderCourseList(likedList)}
+        <hr>
+        <p><b>游玩过的关卡</b></p>${renderCourseList(playedList)}
+        <hr>
+        <p><b>首通关卡</b></p>${renderCourseList(firstClearList)}
+        <hr>
+        <p><b>持有世界纪录关卡</b></p>${renderCourseList(wrList)}
         `;
     } else {
         html += `<p style="color:#c00;">玩家基础信息加载失败</p><hr>`;
     }
-    html += renderCourseList(postedList, "发布的关卡");
-    html += "<hr>";
-    html += renderCourseList(likedList, "点赞过的关卡");
-    html += "<hr>";
-    html += renderCourseList(playedList, "游玩过的关卡");
-    html += "<hr>";
-    html += renderCourseList(firstClearList, "首通关卡");
-    html += "<hr>";
-    html += renderCourseList(wrList, "持有世界纪录关卡");
-
     userInfoBox.innerHTML = html;
     statusBox.innerText = "✅ 全部玩家数据加载完成";
     statusBox.className = "status-box status-green flash-ok";
 }
-
 function saveHistory(id) {
     if (!history.includes(id)) {
         history.unshift(id);
@@ -371,7 +512,6 @@ function clearAllHistory() {
     localStorage.removeItem("smm2_query_history");
     renderHistory();
 }
-
 textSource.addEventListener("keydown", e=>{
     if(e.key === "Enter") scanAllText();
 })
