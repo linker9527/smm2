@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mario Maker 2 Level & Player Query</title>
+<title>SMM2 Level & Player Lookup</title>
 <style>
 *{font-family:system-ui, -apple-system, Helvetica Rounded, sans-serif;box-sizing:border-box;margin:0;padding:0;}
 body{background:linear-gradient(140deg,#ff3c38,#ffc107);min-height:100vh;padding:24px 16px;display:flex;justify-content:center;}
-.card{backdrop-filter:blur(10px);background:rgba(255,255,255,0.94);border-radius:24px;box-shadow:0 10px 25px rgba(0,0,0,0.1);width:100%;max-width:640px;padding:20px 24px;}
+.card{backdrop-filter:blur(10px);background:rgba(255,255,255,0.94);border-radius:24px;width:100%;max-width:640px;padding:20px 24px;}
 h1{font-size:24px;font-weight:bold;color:#dc2626;text-align:center;margin-bottom:8px;}
 .sub-desc{text-align:center;color:#666;font-size:14px;margin-bottom:16px;}
 .status-box{margin-bottom:16px;padding:12px 16px;border-radius:12px;background:#fef3c7;color:#92400e;text-align:center;font-size:14px;}
@@ -18,16 +18,24 @@ h1{font-size:24px;font-weight:bold;color:#dc2626;text-align:center;margin-bottom
 details summary{font-weight:500;color:#444;cursor:pointer;}
 textarea{width:100%;margin-top:12px;padding:10px;border:1px solid #ddd;border-radius:8px;resize:none;min-height:80px;}
 .btn-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
-.btn-red{background:#ef4444;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;}
+.btn-red{background:#ef4444;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;text-decoration:none;display:inline-block;}
 .btn-red:hover{background:#dc2626;}
-.btn-amber{background:#f59e0b;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;}
+.btn-amber{background:#f59e0b;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;flex:1;}
 .btn-amber:hover{background:#d97706;}
-.btn-blue{background:#3b82f6;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;}
+.btn-blue{background:#3b82f6;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;flex:1;}
 .btn-blue:hover{background:#2563eb;}
 .btn-gray{background:#e5e7eb;color:#333;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;}
 .btn-gray:hover{background:#d1d5db;}
+.btn-long{width:100%;background:#ffffff;color:#222;border:1px solid #ddd;padding:10px;border-radius:8px;font-size:15px;cursor:pointer;margin-top:18px;}
+.btn-long:hover{background:#f7f7f7;}
 .block-title{font-weight:500;color:#333;margin-bottom:8px;font-size:16px;}
 .gray-box{background:#f3f4f6;border-radius:12px;padding:16px;min-height:70px;margin-bottom:20px;}
+#historyBox{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+    gap:10px;
+    background:transparent;
+}
 .empty-text{color:#999;font-size:14px;}
 .id-item{background:white;border:1px solid #ddd;border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
 .id-tag{font-family:"Consolas",monospace;letter-spacing:1px;font-weight:bold;color:#dc2626;}
@@ -35,7 +43,7 @@ textarea{width:100%;margin-top:12px;padding:10px;border:1px solid #ddd;border-ra
 .api-hidden{display:none;}
 .history-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
 .clear-his{font-size:12px;color:#dc2626;border:none;background:transparent;cursor:pointer;}
-.history-item{background:white;border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.history-item{background:white;border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;}
 .his-text{font-family:"Consolas",monospace;color:#444;cursor:pointer;}
 .flash-ok{animation:flashGreen 0.6s ease;}
 @keyframes flashGreen{0%{background:#bbf7d0}100%{background:transparent}}
@@ -47,66 +55,110 @@ input{flex:1;border:1px solid #ddd;border-radius:8px;padding:8px 12px;outline:no
 input:focus{border-color:#f59e0b;}
 .list-item{margin:4px 0;padding:4px;border-bottom:1px #ddd dashed;}
 hr{border:none;border-top:1px #ccc solid;margin:12px 0;}
+.tip-small{font-size:12px;color:#777;margin-top:6px;text-align:center;}
+.check-line{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-top:8px;
+    font-size:14px;
+    width:100%;
+    justify-content:center;
+}
+.check-line input[type="checkbox"]{
+    width:16px;
+    height:16px;
+    flex:none;
+    margin:0;
+}
+.check-line label{
+    flex:none;
+}
+.batch-tips{
+    font-size:12px;
+    color:#666;
+    margin:8px 0 0;
+    line-height:1.6;
+    background:none;
+    box-shadow:none;
+    border:none;
+    padding:0;
+}
 </style>
 </head>
-<body class="p-3 md:p-6 flex flex-col items-center">
+<body>
 <div class="card">
-<h1>Mario Maker 2 Level & Player Query</h1>
-<p class="sub-desc">Auto uppercase ID, query all data in one click</p>
-
+<h1>SMM2 Level & Player Lookup</h1>
+<p class="sub-desc">Download *.bcd files, bulk query all data instantly</p>
 <div id="statusBox" class="status-box">
-Enter ID and click Query or press Enter
+Enter ID then click Search or press Enter
 </div>
-
 <div class="details-wrap">
 <details open>
-<summary>Player Query</summary>
+<summary>Player Lookup</summary>
 <div class="user-input-row">
-<input id="makerInput" type="text" placeholder="Enter Player Maker ID">
+<input id="makerInput" type="text" placeholder="Enter Player ID">
 <button onclick="searchUser()" class="btn-blue">Search Player</button>
 <button onclick="clearUserInput()" class="btn-gray">Clear</button>
+</div>
 </details>
 </div>
-
 <div id="userInfoWrap">
-<p class="block-title">👤 Full Player Information</p>
+<p class="block-title">👤 Full Player Profile</p>
 <div id="userInfoBox" class="info-card"></div>
 </div>
-
 <div class="details-wrap">
 <details open>
-<summary>Level Input / Paste Clipboard</summary>
-<textarea id="textSource" rows="3" placeholder="Paste full Level ID XXX-XXX-XXX"></textarea>
+<summary>Level ID Input / Paste from Clipboard</summary>
+<textarea id="textSource" rows="3" placeholder="Paste full level ID XXX-XXX-XXX or 9-character plain ID"></textarea>
 <div class="btn-row">
-<button onclick="scanAllText()" class="btn-amber">Execute Query</button>
+<button onclick="scanAllText()" class="btn-amber">Run Query</button>
 <button onclick="pasteClipboard()" class="btn-blue">Paste Clipboard</button>
-<button onclick="clearTextarea()" class="btn-gray">Clear</button>
+</div>
+<button onclick="clearTextarea()" class="btn-gray" style="width:100%;margin-top:12px;">Clear All</button>
+<button onclick="getRandomFiveLevels()" class="btn-long">Random Level Pool</button>
+<p class="tip-small">Pull random levels (files downloadable)</p>
+<div class="check-line">
+<input type="checkbox" id="autoOpenTabCheck" checked>
+<label for="autoOpenTabCheck">Auto-download after random pull</label>
+</div>
+<div class="check-line">
+<input type="checkbox" id="batch10Check">
+<label for="batch10Check">Auto-download 10 random levels</label>
+</div>
+<div class="check-line">
+<input type="checkbox" id="batch100Check">
+<label for="batch100Check">Experimental: Download 100 levels</label>
+</div>
+<p class="batch-tips">
+If downloaded file is .gz, extract and rename extension to .bcd<br>
+If no file extension, manually add .bcd suffix<br>
+If no auto-download occurs, save page manually<br>
+Experimental feature note: 100-level pull runs in 10 batches with random 15~21s delay to deduplicate<br>
+After collection completes, files download sequentially every 6.5s to avoid API rate limiting<br>
+One-click batch rename to .bcd: 1. Open <a href="https://rename.tools/zh/app" target="_blank">https://rename.tools/zh/app</a> 2. Add Rule > Insert/Append > File Extension > Append Text > Position: End > Input "bcd" > Import folder with target files > Execute rename
+</p>
 </details>
 </div>
-
 <div>
-<p class="block-title">Pending ID</p>
+<p class="block-title">Identified IDs Ready for Query</p>
 <div id="resultBox" class="gray-box">
-<p class="empty-text">No ID Detected</p>
+<p class="empty-text">No valid IDs detected</p>
 </div>
-</div>
-
 <div id="apiInfoWrap" class="api-hidden">
 <p class="block-title">📊 Level Details</p>
 <div id="apiInfoBox" class="info-card"></div>
 </div>
-
 <div style="margin-top:20px;">
 <div class="history-head">
 <p class="block-title">Query History</p>
-<button onclick="clearAllHistory()" class="clear-his">Clear All</button>
+<button onclick="clearAllHistory()" class="clear-his">Clear All History</button>
 </div>
 <div id="historyBox" class="gray-box">
-<p class="empty-text">No Records</p>
+<p class="empty-text">No past queries</p>
 </div>
 </div>
 </div>
-
 <script>
 const API_BASE = "https://tgrcode.com/mm2";
 const USER_INFO = API_BASE + "/user_info";
@@ -117,9 +169,10 @@ const GET_FIRST_CLEARED = API_BASE + "/get_first_cleared";
 const GET_WORLD_RECORD = API_BASE + "/get_world_record";
 const LEVEL_INFO = API_BASE + "/level_info";
 const THUMB_URL = API_BASE + "/level_entire_thumbnail";
-const ID_REG = /[0-9A-Z]{3}-[0-9A-Z]{3}-[0-9A-Z]{3}/gi;
+const LEVEL_DATA = "https://tgrcode.com/mm2/level_data";
+const SEARCH_ENDLESS = API_BASE + "/search_endless_mode";
+const ID_REG = /[0-9A-Z]{9}|[0-9A-Z]{3}-[0-9A-Z]{3}-[0-9A-Z]{3}/gi;
 let history = JSON.parse(localStorage.getItem("smm2_query_history")) || [];
-
 const textSource = document.getElementById('textSource');
 const makerInput = document.getElementById('makerInput');
 const resultBox = document.getElementById('resultBox');
@@ -129,40 +182,39 @@ const userInfoWrap = document.getElementById("userInfoWrap");
 const userInfoBox = document.getElementById("userInfoBox");
 const historyBox = document.getElementById('historyBox');
 const statusBox = document.getElementById('statusBox');
-
+const autoOpenTabCheck = document.getElementById('autoOpenTabCheck');
+const batch10Check = document.getElementById('batch10Check');
+const batch100Check = document.getElementById('batch100Check');
 renderHistory();
-
 async function pasteClipboard() {
     try {
         const clipText = await navigator.clipboard.readText();
         textSource.value = clipText;
         statusBox.className = "status-box status-green";
-        statusBox.innerText = "✅ Clipboard content loaded";
+        statusBox.innerText = "✅ Clipboard content loaded successfully";
     } catch (e) {
         statusBox.className = "status-box status-red";
         statusBox.innerText = "❌ Failed to read clipboard, paste manually";
     }
 }
-
 function clearTextarea() {
     textSource.value = "";
-    resultBox.innerHTML = "<p class='empty-text'>No ID Detected</p>";
+    resultBox.innerHTML = "<p class='empty-text'>No valid IDs detected</p>";
     apiInfoWrap.classList.add("api-hidden");
     statusBox.className = "status-box";
-    statusBox.innerText = "Enter ID and click Query or press Enter";
+    statusBox.innerText = "Enter ID then click Search or press Enter";
 }
-
 function clearUserInput() {
     makerInput.value = "";
     userInfoWrap.style.display = "none";
 }
-
 function scanAllText() {
     const raw = textSource.value;
-    const ids = extractIds(raw);
+    let ids = extractIds(raw);
+    ids = ids.slice(0,5);
     renderResult(ids);
     if (ids.length > 0) {
-        statusBox.innerText = `🎉 Detected ID: ${ids[0]}, auto querying`;
+        statusBox.innerText = `🎉 Detected ${ids.length} valid IDs, loading first entry`;
         statusBox.className = "status-box status-green flash-ok";
         fetchLevelInfo(ids[0]);
         saveHistory(ids[0]);
@@ -172,15 +224,16 @@ function scanAllText() {
         apiInfoWrap.classList.add("api-hidden");
     }
 }
-
 function extractIds(text) {
     const rawMatch = text.match(ID_REG) || [];
-    return [...new Set(rawMatch.map(s => s.toUpperCase()))];
+    return [...new Set(rawMatch.map(s => {
+        const up = s.toUpperCase();
+        return up.length === 9 ? `${up.slice(0,3)}-${up.slice(3,6)}-${up.slice(6)}` : up;
+    }))];
 }
-
 function renderResult(ids) {
     if (!ids || ids.length === 0) {
-        resultBox.innerHTML = "<p class='empty-text'>No ID Detected</p>";
+        resultBox.innerHTML = "<p class='empty-text'>No valid IDs detected</p>";
         return;
     }
     let html = "";
@@ -190,61 +243,147 @@ function renderResult(ids) {
             <span class="id-tag">${id}</span>
             <div class="btn-row" style="margin-top:0;">
                 <button onclick="fetchLevelInfo('${id}')" class="btn-red" style="padding:4px 8px;font-size:12px;">View Details</button>
-                <button onclick="fillText('${id}')" class="btn-blue" style="padding:4px 8px;">Fill Input</button>
+                <button onclick="fillText('${id}')" class="btn-blue" style="padding:4px 8px;">Fill Input Box</button>
             </div>`;
     });
     resultBox.innerHTML = html;
 }
-
 function fillText(id) {
     textSource.value = id;
 }
-
+// Sequential download queue, 6.5s delay per request to avoid 429 rate limits
+async function downloadQueue(idList) {
+    for(const fullId of idList){
+        const pure = fullId.replace(/-/g, "");
+        window.open(`${LEVEL_DATA}/${pure}`, "_blank");
+        await new Promise(resolve => setTimeout(resolve, 6500));
+    }
+}
+// Generate random wait time between batches
+function getRandomWait(){
+    const min = 5000;
+    const max = 11000;
+    return Math.floor(Math.random() * (max - min) + min);
+}
+async function getRandomFiveLevels() {
+    statusBox.innerText = "⏳ Starting level collection";
+    statusBox.className = "status-box status-orange";
+    const uniqueIds = new Set();
+    let totalBatch = 1;
+    let maxPick = 1;
+    if(batch100Check.checked){
+        totalBatch = 10;
+        maxPick = 100;
+    }else if(batch10Check.checked){
+        totalBatch = 1;
+        maxPick = 10;
+    }
+    let stopFlag = false;
+    // Complete all batch collection first
+    for(let batch=1; batch<=totalBatch; batch++){
+        if(stopFlag) break;
+        try{
+            const res = await fetch(SEARCH_ENDLESS);
+            if(res.status === 429){
+                statusBox.innerText = `Batch ${batch} hit rate limit, collection stopped. Total unique IDs: ${uniqueIds.size}`;
+                statusBox.className = "status-box status-red";
+                stopFlag = true;
+                break;
+            }
+            if(!res.ok) throw new Error("API connection error");
+            const data = await res.json();
+            const list = data.courses || [];
+            list.forEach(item=>{
+                const raw = item.course_id;
+                const fmt = `${raw.slice(0,3)}-${raw.slice(3,6)}-${raw.slice(6)}`;
+                uniqueIds.add(fmt);
+            });
+            statusBox.innerText = `Batch ${batch} finished, unique IDs collected: ${uniqueIds.size}`;
+            if(batch < totalBatch){
+                const waitMs = getRandomWait();
+                const sec = (waitMs / 1000).toFixed(1);
+                statusBox.innerText += `, waiting ${sec}s for next batch`;
+                await new Promise(r=>setTimeout(r, waitMs));
+            }
+        }catch(err){
+            statusBox.innerText = `Batch ${batch} failed: ${err.message}, collection aborted`;
+            statusBox.className = "status-box status-red";
+            stopFlag = true;
+            break;
+        }
+    }
+    // Cap collected IDs to requested limit
+    let picked = Array.from(uniqueIds).slice(0, maxPick);
+    textSource.value = picked.join("\n");
+    scanAllText();
+    statusBox.innerText = `✅ Collection complete, total levels: ${picked.length}`;
+    statusBox.className = "status-box status-green flash-ok";
+    // Auto download only if any download checkbox is ticked
+    if(autoOpenTabCheck.checked || batch10Check.checked || batch100Check.checked){
+        statusBox.innerText = `⏳ Starting sequential downloads, 6.5s delay per file`;
+        await downloadQueue(picked);
+        statusBox.innerText = `✅ All download links triggered`;
+    }
+}
 async function fetchLevelInfo(courseId) {
+    const pureId = courseId.replace(/-/g,"");
     try {
-        const res = await fetch(`${LEVEL_INFO}/${courseId}`);
-        if (!res.ok) throw new Error("err");
+        const res = await fetch(`${LEVEL_INFO}/${pureId}`);
+        if (res.status === 429) {
+            apiInfoWrap.classList.remove("api-hidden");
+            apiInfoBox.innerHTML = `<p style="color:#dc2626;">429 Rate Limited - Please wait before retrying</p>`;
+            return;
+        }
+        if (!res.ok) throw new Error("Request failed");
         const data = await res.json();
         apiInfoWrap.classList.remove("api-hidden");
-        const fullImgUrl = `${THUMB_URL}/${courseId}`;
+        const fullImgUrl = `${THUMB_URL}/${pureId}`;
+        const gzDownloadUrl = `${LEVEL_DATA}/${pureId}`;
         apiInfoBox.innerHTML = `
-        <p><span style="font-weight:bold;">Level ID: </span>${courseId}</p>
-        <p><span style="font-weight:bold;">Level Name: </span>${data.name || "No Name"}</p>
-        <p><span style="font-weight:bold;">Player ID: </span>${data.maker_id || "undefined"}</p>
-        <p><span style="font-weight:bold;">Total Plays: </span>${data.courses_played || "undefined"}</p>
-        <p><span style="font-weight:bold;">Likes / Boos: </span>${data.likes || 0} / ${data.dislikes || 0}</p>
-        <p><span style="font-weight:bold;">Clear Rate: </span>${data.clear_rate ? data.clear_rate + "%" : "undefined"}</p>
-        <p><span style="font-weight:bold;">Versus Stats: </span>Total ${data.battle_total || "undefined"}, Wins ${data.battle_win || "undefined"}</p>
-        <p><span style="font-weight:bold;">Full World Preview: </span><a href="${fullImgUrl}" target="_blank" class="link-text">${fullImgUrl}</p>
+        <p><span style="font-weight:bold;">Level ID:</span> ${courseId}</p>
+        <p><span style="font-weight:bold;">Level Name:</span> ${data.name || "No Name"}</p>
+        <p><span style="font-weight:bold;">Creator ID:</span> ${data.maker_id || "No Data"}</p>
+        <p><span style="font-weight:bold;">Total Plays:</span> ${data.courses_played || "No Data"}</p>
+        <p><span style="font-weight:bold;">Likes / Dislikes:</span> ${data.likes || 0} / ${data.dislikes || 0}</p>
+        <p><span style="font-weight:bold;">Clear Rate:</span> ${data.clear_rate ? data.clear_rate + "%" : "No Data"}</p>
+        <p><span style="font-weight:bold;">Versus Stats:</span> Total Matches ${data.battle_total || "No Data"}, Wins ${data.battle_win || "No Data"}</p>
+        <p><span style="font-weight:bold;">Full Level Thumbnail:</span><a href="${fullImgUrl}" target="_blank" class="link-text">${fullImgUrl}</a></p>
+        <hr>
+        <p style="font-weight:bold;color:#222;text-align:center;">Beta Feature</p>
+        <div style="margin:12px 0;text-align:center;">
+            <a href="${gzDownloadUrl}" target="_blank" class="btn-red">Download Level File</a>
+        </div>
+        <p style="font-size:13px;color:#777;line-height:1.6;">
+            ❶ Mac: Direct download, rename file extension to .bcd manually<br>
+            ❷ Windows/Android: Extract .gz archive then rename to .bcd<br>
+        </p>
         `;
     } catch (err) {
         apiInfoWrap.classList.remove("api-hidden");
-        apiInfoBox.innerHTML = `<p style="color:#dc2626;">Query Failed: Rate limited / API down / Network error</p>`;
+        apiInfoBox.innerHTML = `<p style="color:#dc2626;">Too many requests / API offline / Network error</p>`;
     }
 }
-
-function renderCourseList(rawData, title) {
+function renderCourseList(rawData) {
     const arr = Array.isArray(rawData) ? rawData : [];
-    if (arr.length === 0) return `<p><b>${title}: </b>No Data</p>`;
-    let html = `<p><b>${title} (Total ${arr.length}): </b></p>`;
+    if (arr.length === 0) return `<p><b>No entries found</b></p>`;
+    let html = "";
     arr.forEach(item => {
         const cid = item.course_id ?? "Unknown ID";
-        const cName = item.name ?? "No Name";
+        const cName = item.name ?? "Untitled";
         const clike = item.likes ?? 0;
         const clearRate = item.clear_rate_pretty ?? "N/A";
         html += `<div class="list-item">ID: ${cid} | Name: ${cName} | Likes: ${clike} | Clear Rate: ${clearRate}</div>`;
     });
     return html;
 }
-
 async function searchUser() {
     let mid = makerInput.value.trim().toUpperCase();
     if (!mid) {
-        statusBox.innerText = "⚠️ Please input Player Maker ID";
+        statusBox.innerText = "⚠️ Please input a Player ID";
         statusBox.className = "status-box status-orange";
         return;
     }
-    statusBox.innerText = "⏳ Loading all player data";
+    statusBox.innerText = "⏳ Loading full player statistics";
     statusBox.className = "status-box status-orange";
     userInfoWrap.style.display = "block";
     let userData = null;
@@ -253,9 +392,12 @@ async function searchUser() {
     let playedList = [];
     let firstClearList = [];
     let wrList = [];
-
     try {
         const r1 = await fetch(`${USER_INFO}/${mid}`);
+        if(r1.status === 429){
+            userInfoBox.innerHTML = `<p style="color:#dc2626;">429 Rate Limited - Retry player lookup later</p>`;
+            return;
+        }
         if (r1.ok) userData = await r1.json();
     } catch (e) {}
     try {
@@ -278,10 +420,9 @@ async function searchUser() {
         const r6 = await fetch(`${GET_WORLD_RECORD}/${mid}`);
         if (r6.ok) { const res = await r6.json(); wrList = res.courses || []; }
     } catch (e) {}
-
     let html = "";
     if (userData) {
-        const miiImg = userData.mii_image ?? "None";
+        const miiImg = userData.mii_image ?? "N/A";
         const uploadTotal = userData.uploaded_levels ?? "No Data";
         const makerPoint = userData.maker_points ?? 0;
         const totalLike = userData.likes ?? "No Data";
@@ -298,44 +439,42 @@ async function searchUser() {
         const wrCount = userData.world_records ?? 0;
         const firstClearCount = userData.first_clears ?? 0;
         html += `
-        <p><span style="font-weight:bold;">Player ID: </span>${mid}</p>
-        <p><span style="font-weight:bold;">Player Name: </span>${userData.name || "No Name"}</p>
-        <p><span style="font-weight:bold;">Mii Avatar: </span><a href="${miiImg}" target="_blank" class="link-text">${miiImg}</a></p>
-        <p><span style="font-weight:bold;">Published Levels: </span>${uploadTotal}</p>
-        <p><span style="font-weight:bold;">Maker Points: </span>${makerPoint}</p>
-        <p><span style="font-weight:bold;">Total Likes: </span>${totalLike}</p>
-        <p><span style="font-weight:bold;">Total Boos: </span>${totalBoos}</p>
-        <p><span style="font-weight:bold;">Total Plays: </span>${totalPlay}</p>
-        <p><span style="font-weight:bold;">Total Clears: </span>${totalClear}</p>
-        <p><span style="font-weight:bold;">Total Deaths: </span>${totalDeath}</p>
-        <p><span style="font-weight:bold;">Versus Rank: </span>${versusRank}</p>
-        <p><span style="font-weight:bold;">Total Versus Matches: </span>${totalBattle}</p>
-        <p><span style="font-weight:bold;">Versus Wins: </span>${battleWin}</p>
-        <p><span style="font-weight:bold;">Versus Losses: </span>${battleLose}</p>
-        <p><span style="font-weight:bold;">Win Rate: </span>${winRate}</p>
-        <p><span style="font-weight:bold;">Global Avg Clear Rate: </span>${avgClearRate}</p>
-        <p><span style="font-weight:bold;">World Records Owned: </span>${wrCount}</p>
-        <p><span style="font-weight:bold;">First Clears Count: </span>${firstClearCount}</p>
+        <p><span style="font-weight:bold;">Player ID:</span> ${mid}</p>
+        <p><span style="font-weight:bold;">Player Name:</span> ${userData.name || "No Name"}</p>
+        <p><span style="font-weight:bold;">Mii Avatar:</span><a href="${miiImg}" target="_blank" class="link-text">${miiImg}</a></p>
+        <p><span style="font-weight:bold;">Total Published Levels:</span> ${uploadTotal}</p>
+        <p><span style="font-weight:bold;">Maker Points:</span> ${makerPoint}</p>
+        <p><span style="font-weight:bold;">Total Likes Received:</span> ${totalLike}</p>
+        <p><span style="font-weight:bold;">Total Dislikes Received:</span> ${totalBoos}</p>
+        <p><span style="font-weight:bold;">Total Global Plays:</span> ${totalPlay}</p>
+        <p><span style="font-weight:bold;">Total Global Clears:</span> ${totalClear}</p>
+        <p><span style="font-weight:bold;">Total Deaths Across All Levels:</span> ${totalDeath}</p>
+        <p><span style="font-weight:bold;">Versus Rank:</span> ${versusRank}</p>
+        <p><span style="font-weight:bold;">Total Versus Matches:</span> ${totalBattle}</p>
+        <p><span style="font-weight:bold;">Versus Wins:</span> ${battleWin}</p>
+        <p><span style="font-weight:bold;">Versus Losses:</span> ${battleLose}</p>
+        <p><span style="font-weight:bold;">Versus Win Rate:</span> ${winRate}</p>
+        <p><span style="font-weight:bold;">Global Average Clear Rate:</span> ${avgClearRate}</p>
+        <p><span style="font-weight:bold;">World Records Held:</span> ${wrCount}</p>
+        <p><span style="font-weight:bold;">First Clear Records:</span> ${firstClearCount}</p>
         <hr>
+        <p><b>Published Levels</b></p>${renderCourseList(postedList)}
+        <hr>
+        <p><b>Liked Levels</b></p>${renderCourseList(likedList)}
+        <hr>
+        <p><b>Played Levels</b></p>${renderCourseList(playedList)}
+        <hr>
+        <p><b>First Cleared Levels</b></p>${renderCourseList(firstClearList)}
+        <hr>
+        <p><b>World Record Levels Owned</b></p>${renderCourseList(wrList)}
         `;
     } else {
-        html += `<p style="color:#c00;">Failed to load base player info</p><hr>`;
+        html += `<p style="color:#c00;">Failed to load base player information</p><hr>`;
     }
-    html += renderCourseList(postedList, "Published Levels");
-    html += "<hr>";
-    html += renderCourseList(likedList, "Liked Levels");
-    html += "<hr>";
-    html += renderCourseList(playedList, "Played Levels");
-    html += "<hr>";
-    html += renderCourseList(firstClearList, "First Cleared Levels");
-    html += "<hr>";
-    html += renderCourseList(wrList, "World Record Levels");
-
     userInfoBox.innerHTML = html;
-    statusBox.innerText = "✅ All player data loaded";
+    statusBox.innerText = "✅ All player stats loaded successfully";
     statusBox.className = "status-box status-green flash-ok";
 }
-
 function saveHistory(id) {
     if (!history.includes(id)) {
         history.unshift(id);
@@ -346,7 +485,7 @@ function saveHistory(id) {
 }
 function renderHistory() {
     if (history.length === 0) {
-        historyBox.innerHTML = "<p class='empty-text'>No Records</p>";
+        historyBox.innerHTML = "<p class='empty-text'>No past queries</p>";
         return;
     }
     let html = "";
@@ -355,7 +494,7 @@ function renderHistory() {
         <div class="history-item">
             <span class="his-text" onclick="fillText('${id}')">${id}</span>
             <div class="btn-row" style="margin-top:0;">
-                <button onclick="fetchLevelInfo('${id}')" style="font-size:12px;color:#3b82f6;background:transparent;border:none;cursor:pointer;">Query</button>
+                <button onclick="fetchLevelInfo('${id}')" style="font-size:12px;color:#3b82f6;background:transparent;border:none;cursor:pointer;">Lookup</button>
                 <button onclick="delSingleHistory('${id}')" style="font-size:12px;color:#dc2626;background:transparent;border:none;cursor:pointer;">Delete</button>
             </div>`;
     });
@@ -371,7 +510,6 @@ function clearAllHistory() {
     localStorage.removeItem("smm2_query_history");
     renderHistory();
 }
-
 textSource.addEventListener("keydown", e=>{
     if(e.key === "Enter") scanAllText();
 })
