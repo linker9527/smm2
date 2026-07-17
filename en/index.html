@@ -84,18 +84,30 @@ hr{border:none;border-top:1px #ccc solid;margin:12px 0;}
     border:none;
     padding:0;
 }
+.diff-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px 16px;
+    justify-content:center;
+    margin:10px 0;
+}
+.diff-item{
+    display:flex;
+    align-items:center;
+    gap:4px;
+}
 </style>
 </head>
 <body>
 <div class="card">
 <h1>SMM2 Level & Player Lookup</h1>
-<p class="sub-desc">Download *.bcd files, bulk query all data instantly</p>
+<p class="sub-desc">Download *.bcd files & fetch full data instantly</p>
 <div id="statusBox" class="status-box">
 Enter ID then click Search or press Enter
 </div>
 <div class="details-wrap">
 <details open>
-<summary>Player Lookup</summary>
+<summary>Player Search</summary>
 <div class="user-input-row">
 <input id="makerInput" type="text" placeholder="Enter Player ID">
 <button onclick="searchUser()" class="btn-blue">Search Player</button>
@@ -104,44 +116,73 @@ Enter ID then click Search or press Enter
 </details>
 </div>
 <div id="userInfoWrap">
-<p class="block-title">👤 Full Player Profile</p>
+<p class="block-title">👤 Full Player Info</p>
 <div id="userInfoBox" class="info-card"></div>
 </div>
 <div class="details-wrap">
 <details open>
-<summary>Level ID Input / Paste from Clipboard</summary>
-<textarea id="textSource" rows="3" placeholder="Paste full level ID XXX-XXX-XXX or 9-character plain ID"></textarea>
+<summary>Level ID Input / Paste Clipboard</summary>
+<textarea id="textSource" rows="3" placeholder="Paste full ID XXX-XXX-XXX or 9-digit string"></textarea>
 <div class="btn-row">
-<button onclick="scanAllText()" class="btn-amber">Run Query</button>
+<button onclick="scanAllText()" class="btn-amber">Lookup All IDs</button>
 <button onclick="pasteClipboard()" class="btn-blue">Paste Clipboard</button>
 </div>
-<button onclick="clearTextarea()" class="btn-gray" style="width:100%;margin-top:12px;">Clear All</button>
+<button onclick="clearTextarea()" class="btn-gray" style="width:100%;margin-top:12px;">Clear Textbox</button>
 <button onclick="getRandomFiveLevels()" class="btn-long">Random Level Pool</button>
-<p class="tip-small">Pull random levels (files downloadable)</p>
+<p class="tip-small">Pull one random level (downloadable)</p>
 <div class="check-line">
 <input type="checkbox" id="autoOpenTabCheck" checked>
-<label for="autoOpenTabCheck">Auto-download after random pull</label>
+<label for="autoOpenTabCheck">Auto download after random pull</label>
 </div>
 <div class="check-line">
 <input type="checkbox" id="batch10Check">
-<label for="batch10Check">Auto-download 10 random levels</label>
+<label for="batch10Check">Auto download 10 random levels</label>
 </div>
 <div class="check-line">
 <input type="checkbox" id="batch100Check">
 <label for="batch100Check">Experimental: Download 100 levels</label>
 </div>
+
+<hr>
+<p class="block-title">Random Level Difficulty Filter</p>
+<div class="diff-row">
+    <div class="diff-item">
+        <input type="radio" name="diffSel" id="diffAll" value="-1" checked>
+        <label for="diffAll">All Difficulties</label>
+    </div>
+    <div class="diff-item">
+        <input type="radio" name="diffSel" id="diff0" value="0">
+        <label for="diff0">Easy</label>
+    </div>
+    <div class="diff-item">
+        <input type="radio" name="diffSel" id="diff1" value="1">
+        <label for="diff1">Normal</label>
+    </div>
+    <div class="diff-item">
+        <input type="radio" name="diffSel" id="diff2" value="2">
+        <label for="diff2">Hard</label>
+    </div>
+    <div class="diff-item">
+        <input type="radio" name="diffSel" id="diff3" value="3">
+        <label for="diff3">Expert</label>
+    </div>
+    <div class="diff-item">
+        <input type="radio" name="diffSel" id="diff4" value="4">
+        <label for="diff4">Super Expert</label>
+    </div>
+</div>
+
 <p class="batch-tips">
-If downloaded file is .gz, extract and rename extension to .bcd<br>
-If no file extension, manually add .bcd suffix<br>
-If no auto-download occurs, save page manually<br>
-Experimental feature note: 100-level pull runs in 10 batches with random 15~21s delay to deduplicate<br>
-After collection completes, files download sequentially every 6.5s to avoid API rate limiting<br>
-One-click batch rename to .bcd: 1. Open <a href="https://rename.tools/zh/app" target="_blank">https://rename.tools/zh/app</a> 2. Add Rule > Insert/Append > File Extension > Append Text > Position: End > Input "bcd" > Import folder with target files > Execute rename
+If downloaded file is .gz, extract and rename to .bcd<br>
+If no extension, manually add .bcd suffix<br>
+If auto-download fails, save file manually<br>
+Experimental 100-level note: Split into 10 batches with random 15–21s delay to deduplicate; after collecting all IDs, download sequentially with 6.5s gap to avoid API rate limit<br>
+Batch rename tool: 1. Open <a href="https://rename.tools/zh/app" target="_blank">https://rename.tools/zh/app</a> 2. Add rule → Append extension → Enter bcd → Import folder (only target files inside) → Execute rename
 </p>
 </details>
 </div>
 <div>
-<p class="block-title">Identified IDs Ready for Query</p>
+<p class="block-title">Pending IDs to Look Up</p>
 <div id="resultBox" class="gray-box">
 <p class="empty-text">No valid IDs detected</p>
 </div>
@@ -151,11 +192,11 @@ One-click batch rename to .bcd: 1. Open <a href="https://rename.tools/zh/app" ta
 </div>
 <div style="margin-top:20px;">
 <div class="history-head">
-<p class="block-title">Query History</p>
-<button onclick="clearAllHistory()" class="clear-his">Clear All History</button>
+<p class="block-title">Search History</p>
+<button onclick="clearAllHistory()" class="clear-his">Clear All</button>
 </div>
 <div id="historyBox" class="gray-box">
-<p class="empty-text">No past queries</p>
+<p class="empty-text">No history records</p>
 </div>
 </div>
 </div>
@@ -191,7 +232,7 @@ async function pasteClipboard() {
         const clipText = await navigator.clipboard.readText();
         textSource.value = clipText;
         statusBox.className = "status-box status-green";
-        statusBox.innerText = "✅ Clipboard content loaded successfully";
+        statusBox.innerText = "✅ Clipboard content loaded";
     } catch (e) {
         statusBox.className = "status-box status-red";
         statusBox.innerText = "❌ Failed to read clipboard, paste manually";
@@ -214,7 +255,7 @@ function scanAllText() {
     ids = ids.slice(0,5);
     renderResult(ids);
     if (ids.length > 0) {
-        statusBox.innerText = `🎉 Detected ${ids.length} valid IDs, loading first entry`;
+        statusBox.innerText = `🎉 Detected ${ids.length} IDs, loading first one`;
         statusBox.className = "status-box status-green flash-ok";
         fetchLevelInfo(ids[0]);
         saveHistory(ids[0]);
@@ -251,7 +292,6 @@ function renderResult(ids) {
 function fillText(id) {
     textSource.value = id;
 }
-// Sequential download queue, 6.5s delay per request to avoid 429 rate limits
 async function downloadQueue(idList) {
     for(const fullId of idList){
         const pure = fullId.replace(/-/g, "");
@@ -259,15 +299,20 @@ async function downloadQueue(idList) {
         await new Promise(resolve => setTimeout(resolve, 6500));
     }
 }
-// Generate random wait time between batches
 function getRandomWait(){
     const min = 5000;
     const max = 11000;
     return Math.floor(Math.random() * (max - min) + min);
 }
 async function getRandomFiveLevels() {
-    statusBox.innerText = "⏳ Starting level collection";
+    statusBox.innerText = "⏳ Start fetching levels";
     statusBox.className = "status-box status-orange";
+    const diffRadio = document.querySelector('input[name="diffSel"]:checked');
+    const selectedDiff = diffRadio.value;
+    let fetchUrl = SEARCH_ENDLESS;
+    if (selectedDiff !== "-1") {
+        fetchUrl += `?diff=${selectedDiff}`;
+    }
     const uniqueIds = new Set();
     let totalBatch = 1;
     let maxPick = 1;
@@ -279,18 +324,17 @@ async function getRandomFiveLevels() {
         maxPick = 10;
     }
     let stopFlag = false;
-    // Complete all batch collection first
     for(let batch=1; batch<=totalBatch; batch++){
         if(stopFlag) break;
         try{
-            const res = await fetch(SEARCH_ENDLESS);
+            const res = await fetch(fetchUrl);
             if(res.status === 429){
-                statusBox.innerText = `Batch ${batch} hit rate limit, collection stopped. Total unique IDs: ${uniqueIds.size}`;
+                statusBox.innerText = `Batch ${batch} hit rate limit, stopped. Collected ${uniqueIds.size} unique levels`;
                 statusBox.className = "status-box status-red";
                 stopFlag = true;
                 break;
             }
-            if(!res.ok) throw new Error("API connection error");
+            if(!res.ok) throw new Error("API request failed");
             const data = await res.json();
             const list = data.courses || [];
             list.forEach(item=>{
@@ -298,29 +342,27 @@ async function getRandomFiveLevels() {
                 const fmt = `${raw.slice(0,3)}-${raw.slice(3,6)}-${raw.slice(6)}`;
                 uniqueIds.add(fmt);
             });
-            statusBox.innerText = `Batch ${batch} finished, unique IDs collected: ${uniqueIds.size}`;
+            statusBox.innerText = `Batch ${batch} finished, unique levels collected: ${uniqueIds.size}`;
             if(batch < totalBatch){
                 const waitMs = getRandomWait();
                 const sec = (waitMs / 1000).toFixed(1);
-                statusBox.innerText += `, waiting ${sec}s for next batch`;
+                statusBox.innerText += `, wait ${sec}s for next batch`;
                 await new Promise(r=>setTimeout(r, waitMs));
             }
         }catch(err){
-            statusBox.innerText = `Batch ${batch} failed: ${err.message}, collection aborted`;
+            statusBox.innerText = `Batch ${batch} error: ${err.message}, fetch stopped`;
             statusBox.className = "status-box status-red";
             stopFlag = true;
             break;
         }
     }
-    // Cap collected IDs to requested limit
     let picked = Array.from(uniqueIds).slice(0, maxPick);
     textSource.value = picked.join("\n");
     scanAllText();
-    statusBox.innerText = `✅ Collection complete, total levels: ${picked.length}`;
+    statusBox.innerText = `✅ Fetch complete, total ${picked.length} level IDs`;
     statusBox.className = "status-box status-green flash-ok";
-    // Auto download only if any download checkbox is ticked
     if(autoOpenTabCheck.checked || batch10Check.checked || batch100Check.checked){
-        statusBox.innerText = `⏳ Starting sequential downloads, 6.5s delay per file`;
+        statusBox.innerText = `⏳ Starting sequential download, 6.5s gap per file`;
         await downloadQueue(picked);
         statusBox.innerText = `✅ All download links triggered`;
     }
@@ -331,10 +373,10 @@ async function fetchLevelInfo(courseId) {
         const res = await fetch(`${LEVEL_INFO}/${pureId}`);
         if (res.status === 429) {
             apiInfoWrap.classList.remove("api-hidden");
-            apiInfoBox.innerHTML = `<p style="color:#dc2626;">429 Rate Limited - Please wait before retrying</p>`;
+            apiInfoBox.innerHTML = `<p style="color:#dc2626;">429 Rate limited, retry later</p>`;
             return;
         }
-        if (!res.ok) throw new Error("Request failed");
+        if (!res.ok) throw new Error("request error");
         const data = await res.json();
         apiInfoWrap.classList.remove("api-hidden");
         const fullImgUrl = `${THUMB_URL}/${pureId}`;
@@ -344,32 +386,32 @@ async function fetchLevelInfo(courseId) {
         <p><span style="font-weight:bold;">Level Name:</span> ${data.name || "No Name"}</p>
         <p><span style="font-weight:bold;">Creator ID:</span> ${data.maker_id || "No Data"}</p>
         <p><span style="font-weight:bold;">Total Plays:</span> ${data.courses_played || "No Data"}</p>
-        <p><span style="font-weight:bold;">Likes / Dislikes:</span> ${data.likes || 0} / ${data.dislikes || 0}</p>
+        <p><span style="font-weight:bold;">Likes / Boos:</span> ${data.likes || 0} / ${data.dislikes || 0}</p>
         <p><span style="font-weight:bold;">Clear Rate:</span> ${data.clear_rate ? data.clear_rate + "%" : "No Data"}</p>
         <p><span style="font-weight:bold;">Versus Stats:</span> Total Matches ${data.battle_total || "No Data"}, Wins ${data.battle_win || "No Data"}</p>
-        <p><span style="font-weight:bold;">Full Level Thumbnail:</span><a href="${fullImgUrl}" target="_blank" class="link-text">${fullImgUrl}</a></p>
+        <p><span style="font-weight:bold;">Full World Thumbnail:</span><a href="${fullImgUrl}" target="_blank" class="link-text">${fullImgUrl}</a></p>
         <hr>
         <p style="font-weight:bold;color:#222;text-align:center;">Beta Feature</p>
         <div style="margin:12px 0;text-align:center;">
             <a href="${gzDownloadUrl}" target="_blank" class="btn-red">Download Level File</a>
         </div>
         <p style="font-size:13px;color:#777;line-height:1.6;">
-            ❶ Mac: Direct download, rename file extension to .bcd manually<br>
-            ❷ Windows/Android: Extract .gz archive then rename to .bcd<br>
+            ① Mac: Direct download, rename file suffix to .bcd<br>
+            ② Windows/Android: Extract .gz then rename to .bcd<br>
         </p>
         `;
     } catch (err) {
         apiInfoWrap.classList.remove("api-hidden");
-        apiInfoBox.innerHTML = `<p style="color:#dc2626;">Too many requests / API offline / Network error</p>`;
+        apiInfoBox.innerHTML = `<p style="color:#dc2626;">Too many requests / API broken / Network error</p>`;
     }
 }
 function renderCourseList(rawData) {
     const arr = Array.isArray(rawData) ? rawData : [];
-    if (arr.length === 0) return `<p><b>No entries found</b></p>`;
+    if (arr.length === 0) return `<p><b>No data available</b></p>`;
     let html = "";
     arr.forEach(item => {
         const cid = item.course_id ?? "Unknown ID";
-        const cName = item.name ?? "Untitled";
+        const cName = item.name ?? "No Name";
         const clike = item.likes ?? 0;
         const clearRate = item.clear_rate_pretty ?? "N/A";
         html += `<div class="list-item">ID: ${cid} | Name: ${cName} | Likes: ${clike} | Clear Rate: ${clearRate}</div>`;
@@ -383,7 +425,7 @@ async function searchUser() {
         statusBox.className = "status-box status-orange";
         return;
     }
-    statusBox.innerText = "⏳ Loading full player statistics";
+    statusBox.innerText = "⏳ Loading full player data";
     statusBox.className = "status-box status-orange";
     userInfoWrap.style.display = "block";
     let userData = null;
@@ -395,7 +437,7 @@ async function searchUser() {
     try {
         const r1 = await fetch(`${USER_INFO}/${mid}`);
         if(r1.status === 429){
-            userInfoBox.innerHTML = `<p style="color:#dc2626;">429 Rate Limited - Retry player lookup later</p>`;
+            userInfoBox.innerHTML = `<p style="color:#dc2626;">429 Rate limit hit, retry later for player data</p>`;
             return;
         }
         if (r1.ok) userData = await r1.json();
@@ -422,7 +464,7 @@ async function searchUser() {
     } catch (e) {}
     let html = "";
     if (userData) {
-        const miiImg = userData.mii_image ?? "N/A";
+        const miiImg = userData.mii_image ?? "None";
         const uploadTotal = userData.uploaded_levels ?? "No Data";
         const makerPoint = userData.maker_points ?? 0;
         const totalLike = userData.likes ?? "No Data";
@@ -442,13 +484,13 @@ async function searchUser() {
         <p><span style="font-weight:bold;">Player ID:</span> ${mid}</p>
         <p><span style="font-weight:bold;">Player Name:</span> ${userData.name || "No Name"}</p>
         <p><span style="font-weight:bold;">Mii Avatar:</span><a href="${miiImg}" target="_blank" class="link-text">${miiImg}</a></p>
-        <p><span style="font-weight:bold;">Total Published Levels:</span> ${uploadTotal}</p>
+        <p><span style="font-weight:bold;">Published Levels:</span> ${uploadTotal}</p>
         <p><span style="font-weight:bold;">Maker Points:</span> ${makerPoint}</p>
-        <p><span style="font-weight:bold;">Total Likes Received:</span> ${totalLike}</p>
-        <p><span style="font-weight:bold;">Total Dislikes Received:</span> ${totalBoos}</p>
-        <p><span style="font-weight:bold;">Total Global Plays:</span> ${totalPlay}</p>
-        <p><span style="font-weight:bold;">Total Global Clears:</span> ${totalClear}</p>
-        <p><span style="font-weight:bold;">Total Deaths Across All Levels:</span> ${totalDeath}</p>
+        <p><span style="font-weight:bold;">Total Likes:</span> ${totalLike}</p>
+        <p><span style="font-weight:bold;">Total Boos:</span> ${totalBoos}</p>
+        <p><span style="font-weight:bold;">Total Plays:</span> ${totalPlay}</p>
+        <p><span style="font-weight:bold;">Total Clears:</span> ${totalClear}</p>
+        <p><span style="font-weight:bold;">Total Deaths:</span> ${totalDeath}</p>
         <p><span style="font-weight:bold;">Versus Rank:</span> ${versusRank}</p>
         <p><span style="font-weight:bold;">Total Versus Matches:</span> ${totalBattle}</p>
         <p><span style="font-weight:bold;">Versus Wins:</span> ${battleWin}</p>
@@ -456,7 +498,7 @@ async function searchUser() {
         <p><span style="font-weight:bold;">Versus Win Rate:</span> ${winRate}</p>
         <p><span style="font-weight:bold;">Global Average Clear Rate:</span> ${avgClearRate}</p>
         <p><span style="font-weight:bold;">World Records Held:</span> ${wrCount}</p>
-        <p><span style="font-weight:bold;">First Clear Records:</span> ${firstClearCount}</p>
+        <p><span style="font-weight:bold;">First Clears Count:</span> ${firstClearCount}</p>
         <hr>
         <p><b>Published Levels</b></p>${renderCourseList(postedList)}
         <hr>
@@ -466,13 +508,13 @@ async function searchUser() {
         <hr>
         <p><b>First Cleared Levels</b></p>${renderCourseList(firstClearList)}
         <hr>
-        <p><b>World Record Levels Owned</b></p>${renderCourseList(wrList)}
+        <p><b>World Record Levels</b></p>${renderCourseList(wrList)}
         `;
     } else {
-        html += `<p style="color:#c00;">Failed to load base player information</p><hr>`;
+        html += `<p style="color:#c00;">Failed to load base player info</p><hr>`;
     }
     userInfoBox.innerHTML = html;
-    statusBox.innerText = "✅ All player stats loaded successfully";
+    statusBox.innerText = "✅ All player data loaded";
     statusBox.className = "status-box status-green flash-ok";
 }
 function saveHistory(id) {
@@ -485,7 +527,7 @@ function saveHistory(id) {
 }
 function renderHistory() {
     if (history.length === 0) {
-        historyBox.innerHTML = "<p class='empty-text'>No past queries</p>";
+        historyBox.innerHTML = "<p class='empty-text'>No history records</p>";
         return;
     }
     let html = "";
