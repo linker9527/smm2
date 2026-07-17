@@ -84,6 +84,19 @@ hr{border:none;border-top:1px #ccc solid;margin:12px 0;}
     border:none;
     padding:0;
 }
+/* 难度单选行适配换行 */
+.diff-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px 16px;
+    justify-content:center;
+    margin:10px 0;
+}
+.diff-item{
+    display:flex;
+    align-items:center;
+    gap:4px;
+}
 </style>
 </head>
 <body>
@@ -116,10 +129,8 @@ hr{border:none;border-top:1px #ccc solid;margin:12px 0;}
 <button onclick="pasteClipboard()" class="btn-blue">粘贴剪贴板</button>
 </div>
 <button onclick="clearTextarea()" class="btn-gray" style="width:100%;margin-top:12px;">清空</button>
-
 <button onclick="getRandomFiveLevels()" class="btn-long">我要打团</button>
 <p class="tip-small">一次随机抽取一个图(可下载)</p>
-
 <div class="check-line">
 <input type="checkbox" id="autoOpenTabCheck" checked>
 <label for="autoOpenTabCheck">抽取后下载</label>
@@ -132,6 +143,38 @@ hr{border:none;border-top:1px #ccc solid;margin:12px 0;}
 <input type="checkbox" id="batch100Check">
 <label for="batch100Check">实验性功能：下载100个</label>
 </div>
+
+<!-- ========== 新增难度选择区域 ========== -->
+<hr>
+<p class="block-title">随机关卡难度筛选</p>
+<div class="diff-row">
+    <div class="diff-item">
+        <input type="radio" name="diffSel" id="diffAll" value="-1" checked>
+        <label for="diffAll">全部随机</label>
+    </div>
+    <div class="diff-item">
+        <input type="radio" name="diffSel" id="diff0" value="0">
+        <label for="diff0">简单 Easy</label>
+    </div>
+    <div class="diff-item">
+        <input type="radio" name="diffSel" id="diff1" value="1">
+        <label for="diff1">普通 Normal</label>
+    </div>
+    <div class="diff-item">
+        <input type="radio" name="diffSel" id="diff2" value="2">
+        <label for="diff2">困难 Hard</label>
+    </div>
+    <div class="diff-item">
+        <input type="radio" name="diffSel" id="diff3" value="3">
+        <label for="diff3">专家 Expert</label>
+    </div>
+    <div class="diff-item">
+        <input type="radio" name="diffSel" id="diff4" value="4">
+        <label for="diff4">极难 Super Expert</label>
+    </div>
+</div>
+<!-- ====================================== -->
+
 <p class="batch-tips">
 如果下载的是.gz，解压后重命名加.bcd<br>
 如果下载的没有后缀，重命名加.bcd<br>
@@ -187,7 +230,6 @@ const autoOpenTabCheck = document.getElementById('autoOpenTabCheck');
 const batch10Check = document.getElementById('batch10Check');
 const batch100Check = document.getElementById('batch100Check');
 renderHistory();
-
 async function pasteClipboard() {
     try {
         const clipText = await navigator.clipboard.readText();
@@ -261,7 +303,7 @@ async function downloadQueue(idList) {
         await new Promise(resolve => setTimeout(resolve, 6500));
     }
 }
-// 获取20~26随机等待秒，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，等待时间
+// 获取20~26随机等待秒
 function getRandomWait(){
     const min = 5000;
     const max = 11000;
@@ -270,6 +312,17 @@ function getRandomWait(){
 async function getRandomFiveLevels() {
     statusBox.innerText = "⏳ 开始采集关卡";
     statusBox.className = "status-box status-orange";
+
+    // ======== 新增：读取选中难度，拼接请求URL ========
+    const diffRadio = document.querySelector('input[name="diffSel"]:checked');
+    const selectedDiff = diffRadio.value;
+    let fetchUrl = SEARCH_ENDLESS;
+    // -1 = 全部随机，不带diff参数；0~4 追加diff筛选
+    if (selectedDiff !== "-1") {
+        fetchUrl += `?diff=${selectedDiff}`;
+    }
+    // ================================================
+
     const uniqueIds = new Set();
     let totalBatch = 1;
     let maxPick = 1;
@@ -285,7 +338,8 @@ async function getRandomFiveLevels() {
     for(let batch=1; batch<=totalBatch; batch++){
         if(stopFlag) break;
         try{
-            const res = await fetch(SEARCH_ENDLESS);
+            // 使用拼接好难度参数的URL请求
+            const res = await fetch(fetchUrl);
             if(res.status === 429){
                 statusBox.innerText = `第${batch}批触发限流，停止采集，已收集${uniqueIds.size}个`;
                 statusBox.className = "status-box status-red";
@@ -354,7 +408,7 @@ async function fetchLevelInfo(courseId) {
         <p style="font-weight:bold;color:#222;text-align:center;">测试版功能</p>
         <div style="margin:12px 0;text-align:center;">
             <a href="${gzDownloadUrl}" target="_blank" class="btn-red">关卡文件下载</a>
-        </p>
+        </div>
         <p style="font-size:13px;color:#777;line-height:1.6;">
             ❶ 苹果打开直接下载，文件后缀手动改成.bcd<br>
             ❷ Windows/安卓下载gz解压后重命名.bcd<br>
