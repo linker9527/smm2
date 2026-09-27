@@ -5,53 +5,75 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>马里奥制造2 关卡/玩家查询 | 语言选择</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,"Microsoft YaHei",sans-serif;}
 body{
     height:100vh;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    background:linear-gradient(135deg,#ff4038,#ffc300);
+    background:
+        radial-gradient(circle at 15% 20%, rgba(255,255,255,0.85) 0, rgba(255,255,255,0) 12%),
+        radial-gradient(circle at 85% 15%, rgba(255,255,255,0.7) 0, rgba(255,255,255,0) 9%),
+        radial-gradient(circle at 75% 75%, rgba(255,255,255,0.55) 0, rgba(255,255,255,0) 8%),
+        linear-gradient(180deg,#4dbdf5 0%,#9ddcf9 60%,#ffedb3 100%);
     gap:16px;
 }
 h1{
     color:#fff;
-    font-size:28px;
-    text-shadow:0 2px 8px rgba(0,0,0,0.2);
+    font-size:30px;
+    font-weight:900;
+    letter-spacing:2px;
+    text-align:center;
+    text-shadow:0 3px 0 rgba(0,0,0,0.22);
+    padding:0 16px;
 }
 .sub-title{
     color:#fff;
-    font-size:16px;
-    opacity:0.9;
-    margin-bottom:16px;
+    font-size:15px;
+    opacity:0.95;
+    margin-bottom:20px;
+    text-shadow:0 1px 0 rgba(0,0,0,0.15);
+    text-align:center;
+    padding:0 16px;
 }
 .btn-group{
     display:flex;
-    gap:16px;
+    gap:20px;
     flex-wrap:wrap;
     justify-content:center;
 }
 .lang-btn{
-    padding:14px 36px;
-    border:none;
-    border-radius:12px;
-    font-size:18px;
-    font-weight:bold;
+    padding:16px 42px;
+    border:3px solid #1e2a4a;
+    border-radius:999px;
+    font-size:19px;
+    font-weight:800;
     cursor:pointer;
-    transition:0.2s ease;
+    transition:transform .12s ease, box-shadow .12s ease, filter .15s ease;
+    box-shadow:0 5px 0 rgba(13,48,84,0.55);
 }
 .btn-cn{
-    background:#ffffff;
-    color:#dc2626;
+    background:linear-gradient(180deg,#ff6b6b,#e0343a);
+    color:#fff;
+    text-shadow:0 1px 0 rgba(0,0,0,0.25);
 }
 .btn-en{
-    background:#222222;
-    color:#ffffff;
+    background:linear-gradient(180deg,#5cadff,#2f7df6);
+    color:#fff;
+    text-shadow:0 1px 0 rgba(0,0,0,0.25);
 }
 .lang-btn:hover{
-    transform:scale(1.05);
+    transform:translateY(-2px);
+    filter:brightness(1.07);
+    box-shadow:0 7px 0 rgba(13,48,84,0.55);
 }
+.lang-btn:active{
+    transform:translateY(3px);
+    box-shadow:0 2px 0 rgba(13,48,84,0.55);
+}
+.btn-cn::before{content:"🇨🇳 ";}
+.btn-en::before{content:"🇬🇧 ";}
 </style>
 </head>
 <body>

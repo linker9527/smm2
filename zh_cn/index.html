@@ -5,57 +5,89 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>马造2关卡/玩家查询</title>
 <style>
-*{font-family:system-ui, -apple-system, Helvetica Rounded, sans-serif;box-sizing:border-box;margin:0;padding:0;}
-body{background:linear-gradient(140deg,#ff3c38,#ffc107);min-height:100vh;padding:24px 16px;display:flex;justify-content:center;}
-.card{backdrop-filter:blur(10px);background:rgba(255,255,255,0.94);border-radius:24px;/* 删除卡片阴影 */width:100%;max-width:640px;padding:20px 24px;}
-h1{font-size:24px;font-weight:bold;color:#dc2626;text-align:center;margin-bottom:8px;}
-.sub-desc{text-align:center;color:#666;font-size:14px;margin-bottom:16px;}
-.status-box{margin-bottom:16px;padding:12px 16px;border-radius:12px;background:#fef3c7;color:#92400e;text-align:center;font-size:14px;}
+*{font-family:system-ui, -apple-system, "Helvetica Rounded", "Microsoft YaHei", sans-serif;box-sizing:border-box;margin:0;padding:0;}
+body{
+    background:
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,0.85) 0, rgba(255,255,255,0) 10%),
+        radial-gradient(circle at 88% 12%, rgba(255,255,255,0.7) 0, rgba(255,255,255,0) 8%),
+        radial-gradient(circle at 75% 65%, rgba(255,255,255,0.55) 0, rgba(255,255,255,0) 7%),
+        radial-gradient(circle at 20% 82%, rgba(255,255,255,0.5) 0, rgba(255,255,255,0) 6%),
+        linear-gradient(180deg,#4dbdf5 0%,#9ddcf9 60%,#ffedb3 100%);
+    background-attachment:fixed;
+    min-height:100vh;padding:32px 16px;display:flex;justify-content:center;
+}
+.card{
+    background:rgba(255,255,255,0.97);
+    border:4px solid #1e2a4a;
+    border-radius:22px;
+    width:100%;max-width:640px;
+    padding:0 24px 24px;
+    overflow:hidden;
+    box-shadow:0 14px 40px rgba(13,48,84,0.35);
+}
+h1{
+    font-size:22px;font-weight:900;color:#fff;text-align:center;letter-spacing:1px;
+    margin:0 -24px;padding:16px 12px 13px;
+    background:linear-gradient(180deg,#ff6067,#dd3038);
+    text-shadow:0 2px 0 rgba(0,0,0,0.28);
+}
+.sub-desc{
+    text-align:center;color:#8a6b1f;font-size:13px;font-weight:600;
+    background:#ffe9a8;
+    margin:0 -24px 16px;padding:7px 12px;
+    border-bottom:3px solid #f3d36b;
+}
+.status-box{margin-bottom:16px;padding:12px 16px;border-radius:12px;background:#fef3c7;color:#92400e;text-align:center;font-size:14px;font-weight:600;}
 .status-green{background:#dcfce7;color:#166534;}
 .status-orange{background:#ffedd5;color:#9a3412;}
 .status-red{background:#fee2e2;color:#b91c1c;}
-.details-wrap{margin-bottom:20px;background:#f3f4f6;border-radius:12px;padding:12px;}
-details summary{font-weight:500;color:#444;cursor:pointer;}
-textarea{width:100%;margin-top:12px;padding:10px;border:1px solid #ddd;border-radius:8px;resize:none;min-height:80px;}
+.status-blue{background:#dbeafe;color:#1e40af;}
+.details-wrap{margin-bottom:20px;background:#f2f6fb;border:1px solid #dbe6f3;border-radius:14px;padding:12px;}
+details summary{font-weight:700;color:#1e2a4a;cursor:pointer;}
+details summary::marker{color:#dd3038;}
+details summary:hover{color:#dd3038;}
+textarea{width:100%;margin-top:12px;padding:10px 12px;border:2px solid #cdd8e6;border-radius:10px;resize:none;min-height:80px;font-size:14px;background:#fbfdff;}
+textarea:focus{border-color:#f5a623;box-shadow:0 0 0 3px rgba(245,166,35,0.22);outline:none;}
 .btn-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
-.btn-red{background:#ef4444;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;text-decoration:none;display:inline-block;}
-.btn-red:hover{background:#dc2626;}
-.btn-amber{background:#f59e0b;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;flex:1;}
-.btn-amber:hover{background:#d97706;}
-.btn-blue{background:#3b82f6;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;flex:1;}
-.btn-blue:hover{background:#2563eb;}
-.btn-gray{background:#e5e7eb;color:#333;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;}
-.btn-gray:hover{background:#d1d5db;}
-.btn-long{width:100%;background:#ffffff;color:#222;border:1px solid #ddd;padding:10px;border-radius:8px;font-size:15px;cursor:pointer;margin-top:18px;}
-.btn-long:hover{background:#f7f7f7;}
-.block-title{font-weight:500;color:#333;margin-bottom:8px;font-size:16px;}
-.gray-box{background:#f3f4f6;border-radius:12px;padding:16px;min-height:70px;margin-bottom:20px;}
+.btn-red{background:linear-gradient(180deg,#ff6b6b,#e0343a);color:#fff;border:none;padding:9px 14px;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;box-shadow:0 3px 0 #a11f26;text-shadow:0 1px 0 rgba(0,0,0,0.2);}
+.btn-red:hover{filter:brightness(1.08);}
+.btn-red:active{transform:translateY(2px);box-shadow:0 1px 0 #a11f26;}
+.btn-amber{background:linear-gradient(180deg,#ffc23e,#f59e0b);color:#fff;border:none;padding:9px 14px;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;flex:1;box-shadow:0 3px 0 #b9720a;text-shadow:0 1px 0 rgba(0,0,0,0.2);}
+.btn-amber:hover{filter:brightness(1.08);}
+.btn-amber:active{transform:translateY(2px);box-shadow:0 1px 0 #b9720a;}
+.btn-blue{background:linear-gradient(180deg,#5cadff,#2f7df6);color:#fff;border:none;padding:9px 14px;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;flex:1;box-shadow:0 3px 0 #1d5cc0;text-shadow:0 1px 0 rgba(0,0,0,0.2);}
+.btn-blue:hover{filter:brightness(1.08);}
+.btn-blue:active{transform:translateY(2px);box-shadow:0 1px 0 #1d5cc0;}
+.btn-gray{background:linear-gradient(180deg,#f4f6f9,#e2e8f1);color:#333;border:1.5px solid #c9d4e2;padding:8px 12px;border-radius:999px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 3px 0 #c2cddc;}
+.btn-gray:hover{filter:brightness(1.04);}
+.btn-gray:active{transform:translateY(2px);box-shadow:0 1px 0 #c2cddc;}
+.btn-long{width:100%;background:linear-gradient(180deg,#ffffff,#eef3f9);color:#1e2a4a;border:2px solid #1e2a4a;padding:11px;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;margin-top:18px;box-shadow:0 3px 0 #1e2a4a;}
+.btn-long:hover{background:linear-gradient(180deg,#fff8e6,#ffefc2);}
+.btn-long:active{transform:translateY(2px);box-shadow:0 1px 0 #1e2a4a;}
+.block-title{font-weight:800;color:#1e2a4a;margin-bottom:8px;font-size:15px;}
+.gray-box{background:#f2f6fb;border:1px solid #dbe6f3;border-radius:14px;padding:14px;min-height:70px;margin-bottom:20px;overflow:hidden;}
 #historyBox{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-    gap:10px;
     background:transparent;
+    border:none;
+    padding:0;
 }
-.empty-text{color:#999;font-size:14px;}
-.id-item{background:white;border:1px solid #ddd;border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-.id-tag{font-family:"Consolas",monospace;letter-spacing:1px;font-weight:bold;color:#dc2626;}
-.info-card{border-left:4px solid #ef4444;background:#f3f4f6;border-radius:0 12px 12px 0;padding:16px;line-height:1.7;max-height:60vh;overflow-y:auto;}
+.empty-text{color:#9aa7b8;font-size:14px;text-align:center;padding:20px 0;}
+.info-card{border-left:5px solid #e0343a;background:#fff8ec;border-radius:0 12px 12px 0;padding:14px 16px;line-height:1.7;max-height:60vh;overflow-y:auto;}
 .api-hidden{display:none;}
 .history-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-.clear-his{font-size:12px;color:#dc2626;border:none;background:transparent;cursor:pointer;}
-.history-item{background:white;border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;}
-.his-text{font-family:"Consolas",monospace;color:#444;cursor:pointer;}
+.clear-his{font-size:12px;color:#dd3038;border:none;background:transparent;cursor:pointer;font-weight:700;}
+.clear-his:hover{text-decoration:underline;}
 .flash-ok{animation:flashGreen 0.6s ease;}
 @keyframes flashGreen{0%{background:#bbf7d0}100%{background:transparent}}
-.link-text{color:#2563eb;text-decoration:none;}
+.link-text{color:#2563eb;text-decoration:none;font-weight:600;}
 .link-text:hover{text-decoration:underline;}
 .user-input-row{display:flex;gap:8px;align-items:center;margin-top:12px;}
 #userInfoWrap{margin-bottom:20px;display:none;}
-input{flex:1;border:1px solid #ddd;border-radius:8px;padding:8px 12px;outline:none;}
-input:focus{border-color:#f59e0b;}
-.list-item{margin:4px 0;padding:4px;border-bottom:1px #ddd dashed;}
-hr{border:none;border-top:1px #ccc solid;margin:12px 0;}
-.tip-small{font-size:12px;color:#777;margin-top:6px;text-align:center;}
+input{flex:1;border:2px solid #cdd8e6;border-radius:10px;padding:8px 12px;outline:none;font-size:14px;background:#fbfdff;}
+input:focus{border-color:#f5a623;box-shadow:0 0 0 3px rgba(245,166,35,0.22);}
+.list-item{margin:4px 0;padding:6px 4px;border-bottom:1px #e2e8f0 dashed;}
+hr{border:none;border-top:2px dashed #dbe6f3;margin:12px 0;}
+.tip-small{font-size:12px;color:#7c8899;margin-top:6px;text-align:center;}
 .check-line{
     display:inline-flex;
     align-items:center;
@@ -66,46 +98,141 @@ hr{border:none;border-top:1px #ccc solid;margin:12px 0;}
     justify-content:center;
 }
 .check-line input[type="checkbox"]{
-    width:16px;
-    height:16px;
-    flex:none;
-    margin:0;
+    width:16px;height:16px;flex:none;margin:0;accent-color:#e0343a;
 }
-.check-line label{
-    flex:none;
-}
+.check-line label{flex:none;cursor:pointer;}
 .batch-tips{
+    font-size:12px;color:#66707d;margin:8px 0 0;line-height:1.7;background:none;box-shadow:none;border:none;padding:0;
+}
+.diff-row{display:flex;flex-wrap:wrap;gap:10px 16px;justify-content:center;margin:10px 0;}
+.diff-item{display:flex;align-items:center;gap:4px;cursor:pointer;}
+.diff-item input[type="radio"]{accent-color:#e0343a;}
+/* ===== 表格样式 ===== */
+.table-wrap{
+    width:100%;
+    overflow-x:auto;
+}
+.data-table{
+    width:100%;
+    border-collapse: collapse;
+    background:#fff;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 0 0 1px #dbe6f3;
+}
+.data-table th, .data-table td{
+    padding:10px 12px;
+    border-bottom:1px solid #edf2f8;
+    font-size:14px;
+}
+.data-table th{
+    background:#1e2a4a;
+    font-weight:700;
+    color:#fff;
+    text-align:left;
+    font-size:13px;
+    letter-spacing:0.5px;
+}
+.data-table tr:last-child td{
+    border-bottom:none;
+}
+.data-table tbody tr:nth-child(even){
+    background:#f7fafd;
+}
+.data-table tbody tr:hover{
+    background:#fdf3dd;
+}
+.id-tag{
+    font-family:"Consolas",monospace;
+    letter-spacing:1px;
+    font-weight:bold;
+    color:#e0343a;
+    background:#fdecec;
+    padding:2px 8px;
+    border-radius:6px;
+}
+.his-text{
+    font-family:"Consolas",monospace;
+    color:#1e2a4a;
+    font-weight:600;
+    cursor:pointer;
+}
+.his-text:hover{
+    color:#e0343a;
+}
+.table-btn{
+    border:none;background:transparent;
     font-size:12px;
-    color:#666;
-    margin:8px 0 0;
-    line-height:1.6;
-    background:none;
-    box-shadow:none;
-    border:none;
-    padding:0;
+    font-weight:700;
+    cursor:pointer;
+    padding:2px 6px;
 }
-/* 难度单选行适配换行 */
-.diff-row{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px 16px;
-    justify-content:center;
-    margin:10px 0;
-}
-.diff-item{
-    display:flex;
-    align-items:center;
-    gap:4px;
+.btn-qry{color:#2f7df6;}
+.btn-qry:hover{text-decoration:underline;}
+.btn-del{color:#dd3038;}
+.btn-del:hover{text-decoration:underline;}
+.btn-fill{background:#2f7df6;color:#fff;border:none;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 2px 0 #1d5cc0;}
+.btn-fill:active{transform:translateY(1px);box-shadow:none;}
+.btn-detail{background:#e0343a;color:#fff;border:none;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 2px 0 #a11f26;}
+.btn-detail:active{transform:translateY(1px);box-shadow:none;}
+/* 模拟器文件编辑模块样式 */
+.folder-row{display:flex;gap:8px;align-items:center;margin-top:10px;}
+.replace-row{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap;}
+.num-input{width:80px;flex:none;}
+.file-list{max-height:200px;overflow-y:auto;margin-top:10px;background:#fff;padding:8px;border-radius:10px;border:1.5px solid #dbe6f3;}
+.file-item{padding:5px 8px;border-bottom:1px #eef2f7 dashed;font-size:13px;cursor:pointer;font-family:"Consolas",monospace;border-radius:6px;margin:1px 0;}
+.file-item:hover{background:#fff4dd;}
+.file-item.selected{background:#fde68a;font-weight:bold;box-shadow:inset 3px 0 0 #e0343a;}
+.replace-hint{font-size:12px;color:#66707d;margin-bottom:6px;}
+#replaceRows .replace-row{display:flex;align-items:center;gap:6px;background:#fff7ed;border:1px solid #fcd34d;border-radius:8px;padding:6px 8px;margin-bottom:6px;}
+.replace-preview{margin-top:10px;padding:12px;background:#141d33;color:#cfe0ff;border-radius:10px;border:1px solid #2b3a5e;white-space:pre-wrap;font-family:"Consolas",monospace;font-size:12px;max-height:150px;overflow-y:auto;}
+.warning-text{color:#b91c1c;font-size:13px;margin-top:6px;}
+@media (max-width:480px){
+    .card{padding:0 14px 16px;}
+    h1,.sub-desc{margin:0 -14px;}
+    h1{font-size:19px;}
 }
 </style>
 </head>
 <body>
 <div class="card">
 <h1>马造2关卡/玩家查询</h1>
-<p class="sub-desc">可下载 *.bcd，一键查询全部数据</p>
+<p class="sub-desc">可下载 *.bcd，一键查询全部数据 | 模拟器本地bcd批量编辑</p>
 <div id="statusBox" class="status-box">
 输入ID后点击查询或回车
 </div>
+
+<!-- 【新增】模拟器本地文件批量替换模块 -->
+<div class="details-wrap">
+<details>
+<summary> 模拟器BCD文件批量编辑（需文件夹读写权限）</summary>
+<div class="warning-text">⚠️ 仅支持Chrome/Edge，必须本地打开或HTTPS域名；授权文件夹后才能修改bcd文件，修改前建议备份文件</div>
+
+<div class="folder-row">
+    <input id="folderPathText" readonly placeholder="已选择文件夹路径" style="flex:1;">
+    <button onclick="selectGameFolder()" class="btn-blue">选择模拟器文件夹</button>
+</div>
+<p class="tip-small" id="folderTip">未选择文件夹，无法读取bcd文件</p>
+
+<div class="file-list" id="bcdFileList">
+    <p class="empty-text">暂无bcd文件</p>
+</div>
+
+<hr>
+<p class="block-title">替换关卡文件</p>
+<div class="replace-hint">在上方文件列表中点击选择存档文件（支持多选，再点一下取消），每选一个文件出现一行，填各自的新ID后点替换：</div>
+<div id="replaceRows"><div class="replace-hint" style="color:#999;">未选中任何文件</div></div>
+<div class="replace-row" style="margin-top:10px;">
+    <button onclick="executeMultiReplace()" class="btn-red" style="flex:1">替换选中的文件</button>
+</div>
+<div class="replace-preview" id="previewBox">替换结果将显示在此处</div>
+<p class="warning-text" style="margin-top:8px;">⚠️ 直接覆盖原文件，修改前建议先备份！</p>
+<div class="btn-row" style="margin-top:12px;">
+    <button onclick="clearEditPanel()" class="btn-gray" style="flex:1">清空编辑面板</button>
+</div>
+</details>
+</div>
+
 <div class="details-wrap">
 <details open>
 <summary>玩家查询</summary>
@@ -131,20 +258,23 @@ hr{border:none;border-top:1px #ccc solid;margin:12px 0;}
 <button onclick="clearTextarea()" class="btn-gray" style="width:100%;margin-top:12px;">清空</button>
 <button onclick="getRandomFiveLevels()" class="btn-long">我要打团</button>
 <p class="tip-small">一次随机抽取一个图(可下载)</p>
+<!-- 已移除所有checked，默认不勾选 -->
 <div class="check-line">
-<input type="checkbox" id="autoOpenTabCheck" checked>
+<input type="checkbox" id="autoOpenTabCheck">
 <label for="autoOpenTabCheck">抽取后下载</label>
 </div>
 <div class="check-line">
+<input type="checkbox" id="replaceSaveCheck">
+<label for="replaceSaveCheck">替换上方选中的存档文件</label>
+</div>
+<div class="check-line">
 <input type="checkbox" id="batch10Check">
-<label for="batch10Check">抽取后下载(10个)</label>
+<label for="batch10Check">抽取10个</label>
 </div>
 <div class="check-line">
 <input type="checkbox" id="batch100Check">
-<label for="batch100Check">实验性功能：下载100个</label>
+<label for="batch100Check">实验性功能：抽取100个</label>
 </div>
-
-<!-- ========== 新增难度选择区域 ========== -->
 <hr>
 <p class="block-title">随机关卡难度筛选</p>
 <div class="diff-row">
@@ -153,52 +283,47 @@ hr{border:none;border-top:1px #ccc solid;margin:12px 0;}
         <label for="diffAll">全部随机</label>
     </div>
     <div class="diff-item">
-        <input type="radio" name="diffSel" id="diff0" value="0">
+        <input type="radio" name="diffSel" id="diff0" value="e">
         <label for="diff0">简单 Easy</label>
     </div>
     <div class="diff-item">
-        <input type="radio" name="diffSel" id="diff1" value="1">
+        <input type="radio" name="diffSel" id="diff1" value="n">
         <label for="diff1">普通 Normal</label>
     </div>
     <div class="diff-item">
-        <input type="radio" name="diffSel" id="diff2" value="2">
+        <input type="radio" name="diffSel" id="diff2" value="ex">
         <label for="diff2">困难 Hard</label>
     </div>
     <div class="diff-item">
-        <input type="radio" name="diffSel" id="diff3" value="3">
-        <label for="diff3">专家 Expert</label>
-    </div>
-    <div class="diff-item">
-        <input type="radio" name="diffSel" id="diff4" value="4">
+        <input type="radio" name="diffSel" id="diff4" value="sex">
         <label for="diff4">极难 Super Expert</label>
     </div>
 </div>
-<!-- ====================================== -->
-
 <p class="batch-tips">
-如果下载的是.gz，解压后重命名加.bcd<br>
-如果下载的没有后缀，重命名加.bcd<br>
-如果没有下载请手动保存<br>
-关于实验性功能：下载100个会分10轮采集，每轮随机15~21秒间隔去重；全部收集完成后再串行下载，每6.5秒打开1个，避免瞬间大量请求api限流<br>
-一键添加.bcd后缀 1.打开<a href="https://rename.tools/zh/app" target="_blank">https://rename.tools/zh/app</a> 2.点击 添加规则-添加/插入-扩展名-添加文本-位置选择末尾-输入bcd-导入文件夹（文件夹中只能包括要修改的文件）-执行重命名
+“我要打团”抽取下载的文件已在内存解压好，保存下来直接就是可用的.bcd，无需解压或改后缀<br>
+通过“关卡文件下载”按钮手动下载的：如果是.gz需解压后重命名加.bcd；没有后缀的手动加.bcd；如果没有下载请手动保存<br>
+关于实验性功能：抽取100个会分10轮采集，每轮随机5~6.5秒间隔去重；全部收集完成后串行下载，每6.5秒自动保存1个.bcd，避免瞬间大量请求api限流<br>
+一键添加.bcd后缀 1.打开<a href="https://rename.tools/zh/app" target="_blank">https://rename.tools/zh/app</a> 2.点击 添加规则-添加/插入-扩展名-添加文本-位置选择末尾-输入bcd-执行重命名
 </p>
 </details>
 </div>
+<!-- 待查询ID 改为表格区域 -->
 <div>
 <p class="block-title">待查询ID</p>
-<div id="resultBox" class="gray-box">
+<div id="resultBox" class="gray-box table-wrap">
 <p class="empty-text">暂无识别ID</p>
 </div>
 <div id="apiInfoWrap" class="api-hidden">
 <p class="block-title">📊 关卡详情</p>
 <div id="apiInfoBox" class="info-card"></div>
 </div>
+<!-- 查询历史 改为表格区域 -->
 <div style="margin-top:20px;">
 <div class="history-head">
 <p class="block-title">查询历史</p>
 <button onclick="clearAllHistory()" class="clear-his">清空全部</button>
 </div>
-<div id="historyBox" class="gray-box">
+<div id="historyBox" class="gray-box table-wrap">
 <p class="empty-text">暂无记录</p>
 </div>
 </div>
@@ -216,7 +341,11 @@ const THUMB_URL = API_BASE + "/level_entire_thumbnail";
 const LEVEL_DATA = "https://tgrcode.com/mm2/level_data";
 const SEARCH_ENDLESS = API_BASE + "/search_endless_mode";
 const ID_REG = /[0-9A-Z]{9}|[0-9A-Z]{3}-[0-9A-Z]{3}-[0-9A-Z]{3}/gi;
-let history = JSON.parse(localStorage.getItem("smm2_query_history")) || [];
+let history = [];
+try{
+    const saved = JSON.parse(localStorage.getItem("smm2_query_history"));
+    if(Array.isArray(saved)) history = saved;
+}catch(e){}
 const textSource = document.getElementById('textSource');
 const makerInput = document.getElementById('makerInput');
 const resultBox = document.getElementById('resultBox');
@@ -227,9 +356,33 @@ const userInfoBox = document.getElementById("userInfoBox");
 const historyBox = document.getElementById('historyBox');
 const statusBox = document.getElementById('statusBox');
 const autoOpenTabCheck = document.getElementById('autoOpenTabCheck');
+const replaceSaveCheck = document.getElementById('replaceSaveCheck');
 const batch10Check = document.getElementById('batch10Check');
 const batch100Check = document.getElementById('batch100Check');
+
+// ===================== 模拟器文件编辑全局变量 =====================
+let gameDirHandle = null; // 文件夹权限句柄
+let bcdFileHandles = []; // 所有bcd文件句柄
+const folderPathText = document.getElementById('folderPathText');
+const folderTip = document.getElementById('folderTip');
+const bcdFileList = document.getElementById('bcdFileList');
+let selectedFiles = []; // 多选的文件句柄列表 [{name, handle}]
+const previewBox = document.getElementById('previewBox');
+let taskRunning = false; // 防重入：采集/替换运行中拒绝再次启动
+function esc(s) {
+    return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+// 新增：批量10/100互斥逻辑
+batch10Check.addEventListener('change', function(){
+    if(this.checked) batch100Check.checked = false;
+});
+batch100Check.addEventListener('change', function(){
+    if(this.checked) batch10Check.checked = false;
+});
 renderHistory();
+
+// ===================== 原有剪贴板、查询函数不变 =====================
 async function pasteClipboard() {
     try {
         const clipText = await navigator.clipboard.readText();
@@ -255,7 +408,6 @@ function clearUserInput() {
 function scanAllText() {
     const raw = textSource.value;
     let ids = extractIds(raw);
-    ids = ids.slice(0,5);
     renderResult(ids);
     if (ids.length > 0) {
         statusBox.innerText = `🎉 识别到${ids.length}个ID，优先查询第一个`;
@@ -275,58 +427,196 @@ function extractIds(text) {
         return up.length === 9 ? `${up.slice(0,3)}-${up.slice(3,6)}-${up.slice(6)}` : up;
     }))];
 }
+// 待查询ID渲染为表格
 function renderResult(ids) {
     if (!ids || ids.length === 0) {
         resultBox.innerHTML = "<p class='empty-text'>暂无识别ID</p>";
         return;
     }
-    let html = "";
+    let html = `
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>关卡ID</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+    `;
     ids.forEach(id => {
         html += `
-        <div class="id-item">
-            <span class="id-tag">${id}</span>
-            <div class="btn-row" style="margin-top:0;">
-                <button onclick="fetchLevelInfo('${id}')" class="btn-red" style="padding:4px 8px;font-size:12px;">查看详情</button>
-                <button onclick="fillText('${id}')" class="btn-blue" style="padding:4px 8px;">填入输入框</button>
-            </div>`;
+        <tr>
+            <td><span class="id-tag">${id}</span></td>
+            <td>
+                <button onclick="fetchLevelInfo('${id}')" class="btn-detail">查看详情</button>
+                <button onclick="fillText('${id}')" class="btn-fill">填入输入框</button>
+            </td>
+        </tr>
+        `;
     });
+    html += `</tbody></table>`;
     resultBox.innerHTML = html;
 }
 function fillText(id) {
     textSource.value = id;
 }
-// 严格串行下载，每个间隔6秒，429改这里!!!!!!!!!!!!
+/**
+ * 改用 fetch + Blob + <a download> 触发下载：程序化点击带download属性的锚点不算弹窗，
+ * 不受"用户激活超时后拦截window.open"限制，无需浏览器弹窗白名单
+ */
+async function saveBlobAs(data, filename) {
+    const blob = new Blob([data], {type: "application/octet-stream"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+}
+async function downloadLevelFile(fullId) {
+    const pure = fullId.replace(/-/g, "");
+    let res;
+    try{
+        res = await fetch(`${LEVEL_DATA}/${pure}`);
+    }catch(err){
+        throw new Error("网络错误");
+    }
+    if(res.status === 429) throw new Error("429限流");
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const buf = new Uint8Array(await res.arrayBuffer());
+    let data = buf;
+    const isGzip = buf.length > 2 && buf[0] === 0x1F && buf[1] === 0x8B;
+    const isZlib = buf.length > 2 && buf[0] === 0x78 && (buf[1] === 0x01 || buf[1] === 0x5E || buf[1] === 0x9C || buf[1] === 0xDA);
+    if(isGzip || isZlib){
+        // 已在内存中解压，下载到的直接就是可用的.bcd，无需手动解压重命名
+        try{ data = await inflateBytes(buf, isGzip ? "gzip" : "deflate"); }catch(e){ data = buf; }
+    }
+    await saveBlobAs(data, `${pure}.bcd`);
+}
 async function downloadQueue(idList) {
-    for(const fullId of idList){
-        const pure = fullId.replace(/-/g, "");
-        window.open(`${LEVEL_DATA}/${pure}`, "_blank");
-        await new Promise(resolve => setTimeout(resolve, 6500));
+    const failList = [];
+    for(let i = 0; i < idList.length; i++){
+        const fullId = idList[i];
+        let done = false;
+        for(let retry = 0; retry < 3 && !done; retry++){
+            try{
+                statusBox.innerText = `⏳ 下载 ${i+1}/${idList.length}：${fullId}${retry > 0 ? `（第${retry+1}次重试）` : ""}`;
+                await downloadLevelFile(fullId);
+                done = true;
+            }catch(err){
+                if(retry < 2){
+                    statusBox.innerText = `⚠️ ${fullId} 下载失败：${err.message}，10秒后重试...`;
+                    await new Promise(r=>setTimeout(r, 10000));
+                }else{
+                    failList.push(`${fullId}：${err.message}`);
+                }
+            }
+        }
+        if(i < idList.length - 1) await new Promise(resolve => setTimeout(resolve, 6500));
+    }
+    if(failList.length > 0){
+        statusBox.innerText = `⚠️ 下载结束，成功 ${idList.length - failList.length}/${idList.length}，失败：${failList.join("；")}`;
+        statusBox.className = "status-box status-orange";
+    }else{
+        statusBox.innerText = `✅ 全部 ${idList.length} 个关卡已下载为.bcd文件`;
+        statusBox.className = "status-box status-green flash-ok";
     }
 }
-// 获取20~26随机等待秒
+
+/**
+ * 下载关卡数据并覆盖写入选中的存档bcd文件
+ * 格式识别：① gzip压缩包(1F 8B) ② zlib压缩包(78 01/5E/9C/DA) ③ 未压缩原始数据
+ * 解压后一律以二进制原样写入（不经过文本编码，无损）
+ */
+async function downloadAndReplaceSave(courseId, target) {
+    const pure = courseId.replace(/-/g, "");
+    if(!target){
+        throw new Error("目标文件未指定");
+    }
+    statusBox.innerText = `⏳ 正在下载 ${courseId} 关卡数据...`;
+    let res;
+    try{
+        res = await fetch(`${LEVEL_DATA}/${pure}`);
+    }catch(err){
+        throw new Error("下载失败，请检查网络");
+    }
+    if(!res.ok) throw new Error(`下载失败 HTTP ${res.status}`);
+    const buf = new Uint8Array(await res.arrayBuffer());
+    let data = buf;
+    let mode = "";
+    const isGzip = buf.length > 2 && buf[0] === 0x1F && buf[1] === 0x8B;
+    const isZlib = buf.length > 2 && buf[0] === 0x78 && (buf[1] === 0x01 || buf[1] === 0x5E || buf[1] === 0x9C || buf[1] === 0xDA);
+    if(isGzip){
+        data = await inflateBytes(buf, "gzip");
+        mode = "gz压缩包已解压";
+    }else if(isZlib){
+        data = await inflateBytes(buf, "deflate");
+        mode = "zlib压缩包已解压";
+    }else{
+        mode = "未压缩数据直接使用";
+    }
+    if(!data || data.length === 0){
+        throw new Error("下载内容为空");
+    }
+    const binStr = bytesToStr(data);
+    const ids = extractIds(binStr);
+    if(ids.length > 0){
+        mode += `，识别到ID：${ids[0]}`;
+    }else{
+        mode += "，未识别到关卡ID（可能格式特殊）";
+    }
+    // 存档固定为368KB（376,832字节），校验结果
+    const STD = 368 * 1024;
+    const sizeKb = (data.length / 1024).toFixed(1);
+    const ratio = data.length / STD;
+    if(Math.abs(ratio - 1) <= 0.03){
+        mode += `，大小${sizeKb}KB ✅ 符合标准368KB存档`;
+    }else{
+        mode += `，大小${sizeKb}KB ❌ 不符合标准368KB（${ratio.toFixed(2)}倍）——数据可能未正确解压或格式不同，请把此数字发给我排查`;
+    }
+    await writeBcdFile(target.handle, data);
+    return `${mode}：${target.name} ← ${courseId}`;
+}
 function getRandomWait(){
     const min = 5000;
-    const max = 11000;
+    const max = 6500;
     return Math.floor(Math.random() * (max - min) + min);
 }
 async function getRandomFiveLevels() {
+    if(taskRunning){
+        statusBox.innerText = "⏳ 上一个任务还在进行中，请等待完成后再操作";
+        statusBox.className = "status-box status-orange";
+        return;
+    }
+    if(replaceSaveCheck.checked && selectedFiles.length === 0){
+        statusBox.innerText = "❌ 已勾选“替换上方选中的存档文件”，但还未选中任何文件：请先在上方文件列表点选存档文件，或取消勾选";
+        statusBox.className = "status-box status-red";
+        return;
+    }
+    taskRunning = true;
+    try{
+        await getRandomFiveLevelsCore();
+    }finally{
+        taskRunning = false;
+    }
+}
+async function getRandomFiveLevelsCore() {
     statusBox.innerText = "⏳ 开始采集关卡";
     statusBox.className = "status-box status-orange";
-
-    // ======== 新增：读取选中难度，拼接请求URL ========
     const diffRadio = document.querySelector('input[name="diffSel"]:checked');
     const selectedDiff = diffRadio.value;
-    let fetchUrl = SEARCH_ENDLESS;
-    // -1 = 全部随机，不带diff参数；0~4 追加diff筛选
-    if (selectedDiff !== "-1") {
-        fetchUrl += `?diff=${selectedDiff}`;
-    }
-    // ================================================
-
+    let fetchUrl = selectedDiff === "-1" ? SEARCH_ENDLESS : SEARCH_ENDLESS + `?difficulty=${selectedDiff}`;
     const uniqueIds = new Set();
     let totalBatch = 1;
     let maxPick = 1;
-    if(batch100Check.checked){
+    if(replaceSaveCheck.checked && selectedFiles.length > 0){
+        // 替换模式：按选中文件数自动分批，每批10个关卡，每批间隔5-6秒
+        maxPick = selectedFiles.length;
+        totalBatch = Math.ceil(maxPick / 10);
+        statusBox.innerText = `📦 选中${selectedFiles.length}个文件，需${totalBatch}批抽取（每批10个，间隔5-6秒）`;
+    }else if(batch100Check.checked){
         totalBatch = 10;
         maxPick = 100;
     }else if(batch10Check.checked){
@@ -334,11 +624,9 @@ async function getRandomFiveLevels() {
         maxPick = 10;
     }
     let stopFlag = false;
-    // 先完整采集全部批次
     for(let batch=1; batch<=totalBatch; batch++){
         if(stopFlag) break;
         try{
-            // 使用拼接好难度参数的URL请求
             const res = await fetch(fetchUrl);
             if(res.status === 429){
                 statusBox.innerText = `第${batch}批触发限流，停止采集，已收集${uniqueIds.size}个`;
@@ -368,17 +656,71 @@ async function getRandomFiveLevels() {
             break;
         }
     }
-    // 截取上限数量
     let picked = Array.from(uniqueIds).slice(0, maxPick);
     textSource.value = picked.join("\n");
     scanAllText();
     statusBox.innerText = `✅ 采集完毕，共${picked.length}个关卡ID`;
     statusBox.className = "status-box status-green flash-ok";
-    // 勾选任意下载框才执行下载
-    if(autoOpenTabCheck.checked || batch10Check.checked || batch100Check.checked){
-        statusBox.innerText = `⏳ 开始串行下载，每6.5秒打开1个`;
+    if(autoOpenTabCheck.checked){
+        statusBox.innerText = `⏳ 采集完毕，等待6.5秒后开始串行下载（每6.5秒下载1个，直接存为.bcd）`;
+        await new Promise(r=>setTimeout(r, 6500));
         await downloadQueue(picked);
-        statusBox.innerText = `✅ 全部下载链接发起完毕`;
+    }
+    if(replaceSaveCheck.checked){
+        if(picked.length === 0){
+            statusBox.innerText = "⚠️ 未抽取到关卡，无法替换存档";
+            statusBox.className = "status-box status-orange";
+            return;
+        }
+        if(selectedFiles.length === 0){
+            statusBox.innerText = "❌ 未选中存档文件，请先在上方选择文件夹并点选文件";
+            statusBox.className = "status-box status-red";
+            return;
+        }
+        const total = selectedFiles.length;
+        const okList = [], failList = [];
+        statusBox.innerText = `⏳ 抽取完毕（${picked.length}个关卡），等待6.5秒后开始下载替换${total}个文件...`;
+        statusBox.className = "status-box status-blue";
+        await new Promise(r=>setTimeout(r, 6500));
+        for(let i = 0; i < total; i++){
+            const t = selectedFiles[i];
+            const lvl = picked[i % picked.length]; // 抽到的不够就循环复用
+            let success = false;
+            for(let retry = 0; retry < 3 && !success; retry++){
+                try{
+                    if(retry > 0){
+                        statusBox.innerText = `🔄 [${i+1}/${total}] ${t.name} ← ${lvl}，第${retry+1}次重试...`;
+                        await new Promise(r=>setTimeout(r, 6500));
+                    }else{
+                        statusBox.innerText = `⏳ [${i+1}/${total}] ${t.name} ← ${lvl}，正在下载替换...`;
+                    }
+                    statusBox.className = "status-box status-blue";
+                    const msg = await downloadAndReplaceSave(lvl, t);
+                    okList.push(msg);
+                    success = true;
+                }catch(err){
+                    if(retry < 2){
+                        statusBox.innerText = `⚠️ [${i+1}/${total}] ${t.name} 失败：${err.message}，6.5秒后重试...`;
+                        await new Promise(r=>setTimeout(r, 6500));
+                    }else{
+                        failList.push(`${t.name}：${err.message}（重试3次仍失败）`);
+                    }
+                }
+            }
+            if(i < total - 1){
+                statusBox.innerText = `⏳ [${i+1}/${total}] 完成，等待6.5秒后继续下一个...`;
+                await new Promise(r=>setTimeout(r, 6500));
+            }
+        }
+        if(failList.length > 0){
+            statusBox.innerText = `⚠️ 成功 ${okList.length}/${total}，失败 ${failList.length}：${failList.join("；")}`;
+            statusBox.className = "status-box status-orange";
+            previewBox.innerText = `替换结果：\n${okList.concat(failList).join("\n")}`;
+        }else{
+            statusBox.innerText = `✅ 全部替换完成 ${okList.length}/${total}`;
+            statusBox.className = "status-box status-green flash-ok";
+            previewBox.innerText = okList.join("\n");
+        }
     }
 }
 async function fetchLevelInfo(courseId) {
@@ -397,7 +739,7 @@ async function fetchLevelInfo(courseId) {
         const gzDownloadUrl = `${LEVEL_DATA}/${pureId}`;
         apiInfoBox.innerHTML = `
         <p><span style="font-weight:bold;">关卡ID：</span>${courseId}</p>
-        <p><span style="font-weight:bold;">关卡名称：</span>${data.name || "无名称"}</p>
+        <p><span style="font-weight:bold;">关卡名称：</span>${esc(data.name || "无名称")}</p>
         <p><span style="font-weight:bold;">玩家ID：</span>${data.maker_id || "无数据"}</p>
         <p><span style="font-weight:bold;">总游玩次数：</span>${data.courses_played || "暂无数据"}</p>
         <p><span style="font-weight:bold;">点赞 / 踩：</span>${data.likes || 0} / ${data.dislikes || 0}</p>
@@ -428,7 +770,7 @@ function renderCourseList(rawData) {
         const cName = item.name ?? "无名称";
         const clike = item.likes ?? 0;
         const clearRate = item.clear_rate_pretty ?? "无";
-        html += `<div class="list-item">ID：${cid} | 名称：${cName} | 点赞：${clike} | 通关率：${clearRate}</div>`;
+        html += `<div class="list-item">ID：${esc(cid)} | 名称：${esc(cName)} | 点赞：${esc(clike)} | 通关率：${esc(clearRate)}</div>`;
     });
     return html;
 }
@@ -496,8 +838,8 @@ async function searchUser() {
         const firstClearCount = userData.first_clears ?? 0;
         html += `
         <p><span style="font-weight:bold;">玩家ID：</span>${mid}</p>
-        <p><span style="font-weight:bold;">玩家名称：</span>${userData.name || "无名称"}</p>
-        <p><span style="font-weight:bold;">Mii头像：</span><a href="${miiImg}" target="_blank" class="link-text">${miiImg}</a></p>
+        <p><span style="font-weight:bold;">玩家名称：</span>${esc(userData.name || "无名称")}</p>
+        <p><span style="font-weight:bold;">Mii头像：</span>${/^https?:\/\//.test(miiImg) ? `<a href="${esc(miiImg)}" target="_blank" rel="noopener" class="link-text">${esc(miiImg)}</a>` : esc(miiImg)}</p>
         <p><span style="font-weight:bold;">发布关卡总数：</span>${uploadTotal}</p>
         <p><span style="font-weight:bold;">创作者点数：</span>${makerPoint}</p>
         <p><span style="font-weight:bold;">总点赞：</span>${totalLike}</p>
@@ -539,26 +881,39 @@ function saveHistory(id) {
         renderHistory();
     }
 }
+// 历史记录渲染为表格
 function renderHistory() {
     if (history.length === 0) {
         historyBox.innerHTML = "<p class='empty-text'>暂无记录</p>";
         return;
     }
-    let html = "";
+    let html = `
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>历史ID</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+    `;
     history.forEach(id => {
         html += `
-        <div class="history-item">
-            <span class="his-text" onclick="fillText('${id}')">${id}</span>
-            <div class="btn-row" style="margin-top:0;">
-                <button onclick="fetchLevelInfo('${id}')" style="font-size:12px;color:#3b82f6;background:transparent;border:none;cursor:pointer;">查询</button>
-                <button onclick="delSingleHistory('${id}')" style="font-size:12px;color:#dc2626;background:transparent;border:none;cursor:pointer;">删除</button>
-            </div>`;
+        <tr>
+            <td><span class="his-text" onclick="fillText('${id}')">${id}</span></td>
+            <td>
+                <button onclick="fetchLevelInfo('${id}')" class="table-btn btn-qry">查询</button>
+                <button onclick="delSingleHistory('${id}')" class="table-btn btn-del">删除</button>
+            </td>
+        </tr>
+        `;
     });
+    html += `</tbody></table>`;
     historyBox.innerHTML = html;
 }
 function delSingleHistory(id) {
     history = history.filter(i => i !== id);
-    localStorage.setItem("smm2_query_history");
+    localStorage.setItem("smm2_query_history", JSON.stringify(history));
     renderHistory();
 }
 function clearAllHistory() {
@@ -567,11 +922,298 @@ function clearAllHistory() {
     renderHistory();
 }
 textSource.addEventListener("keydown", e=>{
-    if(e.key === "Enter") scanAllText();
+    if(e.key === "Enter" && !e.shiftKey){
+        e.preventDefault();
+        scanAllText();
+    }
 })
 makerInput.addEventListener("keydown", e=>{
     if(e.key === "Enter") searchUser();
 })
+
+// ===================== 新增模拟器文件编辑核心函数 =====================
+/**
+ * 1. 选择文件夹，申请读写权限（File System Access API）
+ */
+async function selectGameFolder() {
+    try {
+        // 弹出文件夹选择框，请求读写权限
+        gameDirHandle = await window.showDirectoryPicker({
+            mode: "readwrite"
+        });
+        folderPathText.value = gameDirHandle.name;
+        folderTip.innerText = `已授权文件夹：${gameDirHandle.name}，正在扫描bcd文件...`;
+        bcdFileHandles = [];
+        // 遍历文件夹筛选.bcd文件
+        for await (const entry of gameDirHandle.values()) {
+            if (entry.kind === "file" && entry.name.toLowerCase().endsWith(".bcd")) {
+                bcdFileHandles.push(entry);
+            }
+        }
+        // 渲染文件列表
+        if(bcdFileHandles.length === 0){
+            bcdFileList.innerHTML = "<p class='empty-text'>文件夹内未找到.bcd文件</p>";
+        }else{
+            let html = "";
+            bcdFileHandles.forEach((f,i)=>{
+                html += `<div class="file-item" onclick="selectBcdFile(${i}, this)">${f.name}</div>`;
+            })
+            bcdFileList.innerHTML = html;
+            folderTip.innerText = `成功读取${bcdFileHandles.length}个bcd文件，点击文件可多选，选中后在下方面板填新ID`;
+        }
+        statusBox.innerText = "✅ 文件夹读写权限申请成功";
+        statusBox.className = "status-box status-green flash-ok";
+    } catch(err){
+        gameDirHandle = null;
+        bcdFileHandles = [];
+        folderPathText.value = "";
+        bcdFileList.innerHTML = "<p class='empty-text'>暂无bcd文件</p>";
+        if(err.name === "NotAllowedError"){
+            folderTip.innerText = "❌ 用户拒绝文件夹读写权限，无法编辑文件";
+        }else if(err.name === "AbortError"){
+            folderTip.innerText = "已取消选择，未选择任何文件夹";
+            statusBox.className = "status-box";
+            statusBox.innerText = "输入ID后点击查询或回车";
+            return;
+        }else if(err.name === "NotFoundError"){
+            folderTip.innerText = "❌ 未选择任何文件夹";
+        }else{
+            folderTip.innerText = `❌ 浏览器不支持文件API（仅Chrome/Edge新版支持）：${err.message}`;
+        }
+        statusBox.innerText = "文件夹授权失败";
+        statusBox.className = "status-box status-red";
+    }
+}
+
+/**
+ * 2. 二进制无损工具：字节数组 <-> 1:1二进制字符串（绝不走UTF-8，防止损坏数据）
+ */
+function bytesToStr(buf) {
+    let s = "";
+    const CHUNK = 0x8000;
+    for(let i = 0; i < buf.length; i += CHUNK){
+        s += String.fromCharCode.apply(null, buf.subarray(i, i + CHUNK));
+    }
+    return s;
+}
+function strToBytes(s) {
+    const out = new Uint8Array(s.length);
+    for(let i = 0; i < s.length; i++) out[i] = s.charCodeAt(i) & 0xFF;
+    return out;
+}
+async function inflateBytes(buf, fmt) {
+    const ds = new DecompressionStream(fmt);
+    const stream = new Blob([buf]).stream().pipeThrough(ds);
+    const reader = stream.getReader();
+    const chunks = [];
+    let total = 0;
+    while(true){
+        const {done, value} = await reader.read();
+        if(done) break;
+        chunks.push(value);
+        total += value.length;
+    }
+    const out = new Uint8Array(total);
+    let off = 0;
+    for(const c of chunks){ out.set(c, off); off += c.length; }
+    return out;
+}
+
+/**
+ * 3. 读取单个bcd文件的原始字节（二进制无损）
+ */
+async function readBcdFile(fileHandle) {
+    const file = await fileHandle.getFile();
+    return new Uint8Array(await file.arrayBuffer());
+}
+
+/**
+ * 4. 将原始字节写入bcd文件（需要write权限）
+ *    每次写入前先取最新文件快照，失败则从目录重新获取句柄，避免"缓存状态错配"报错
+ */
+async function writeBcdFile(fileHandle, data) {
+    // 尝试直接写当前句柄
+    try{
+        const writable = await fileHandle.createWritable();
+        await writable.write(data);
+        await writable.close();
+        return;
+    }catch(e){
+        // 句柄可能已过期，进入下面的重新获取流程
+    }
+    // 从授权目录重新找到同名文件获取新鲜句柄
+    if(!gameDirHandle){ throw new Error("未授权目录，无法重新获取文件"); }
+    let fresh = null;
+    for await(const entry of gameDirHandle.values()){
+        if(entry.kind === "file" && entry.name === fileHandle.name){
+            fresh = entry;
+            break;
+        }
+    }
+    if(!fresh){ throw new Error(`无法重新获取文件句柄：${fileHandle.name}`); }
+    const writable = await fresh.createWritable();
+    await writable.write(data);
+    await writable.close();
+    // 同步更新 bcdFileHandles 中对应项，防止下次再过期
+    const i = bcdFileHandles.findIndex(f => f.name === fileHandle.name);
+    if(i >= 0) bcdFileHandles[i] = fresh;
+    const j = selectedFiles.findIndex(f => f.name === fileHandle.name);
+    if(j >= 0) selectedFiles[j].handle = fresh;
+}
+
+/**
+ * 4. 替换逻辑：指定第N个ID全局替换
+ */
+/**
+ * 4. 点击文件列表选中目标文件（必须先授权文件夹 + 点选文件）
+ */
+/**
+ * 4. 点击文件列表：多选/取消选中（再点一下取消），每选一个渲染一行
+ */
+function selectBcdFile(index, el) {
+    const fh = bcdFileHandles[index];
+    if(!fh) return;
+    const i = selectedFiles.findIndex(f => f.name === fh.name);
+    if(i >= 0){
+        selectedFiles.splice(i, 1);
+        el.classList.remove('selected');
+    }else{
+        selectedFiles.push({name: fh.name, handle: fh});
+        el.classList.add('selected');
+    }
+    renderReplaceRows();
+}
+
+/**
+ * 5. 渲染每行：文件名 + 新ID输入框
+ */
+function renderReplaceRows() {
+    const box = document.getElementById('replaceRows');
+    if(selectedFiles.length === 0){
+        box.innerHTML = '<div class="replace-hint" style="color:#999;">未选中任何文件</div>';
+        previewBox.innerText = "在上方文件列表中点击选择存档文件";
+        return;
+    }
+    const oldVals = {};
+    box.querySelectorAll('input[data-name]').forEach(inp => {
+        oldVals[inp.dataset.name] = inp.value;
+    });
+    let html = "";
+    selectedFiles.forEach((f, i) => {
+        const savedVal = Object.prototype.hasOwnProperty.call(oldVals, f.name) ? esc(oldVals[f.name]) : "";
+        html += `<div class="replace-row">`
+              + `<span style="font-family:Consolas;font-size:13px;">${esc(f.name)}</span>`
+              + `<span style="color:#666;font-size:12px;">→ 新ID：</span>`
+              + `<input data-idx="${i}" data-name="${esc(f.name)}" value="${savedVal}" placeholder="XXX-XXX-XXX 或 9位字符" style="flex:1;min-width:140px;">`
+              + `</div>`;
+    });
+    box.innerHTML = html;
+    previewBox.innerText = `已选择 ${selectedFiles.length} 个文件，填写各行的新ID后点“替换选中的文件”`;
+}
+
+/**
+ * 6. 批量替换：每个选中的文件替换成各自行的新ID，并覆盖保存
+ */
+async function executeMultiReplace() {
+    if(taskRunning){
+        statusBox.innerText = "⏳ 上一个任务还在进行中，请等待完成后再操作";
+        statusBox.className = "status-box status-orange";
+        return;
+    }
+    taskRunning = true;
+    try{
+        await executeMultiReplaceCore();
+    }finally{
+        taskRunning = false;
+    }
+}
+async function executeMultiReplaceCore() {
+    if(!gameDirHandle || bcdFileHandles.length === 0){
+        statusBox.innerText = "请先选择模拟器文件夹并授权读写权限";
+        statusBox.className = "status-box status-orange";
+        return;
+    }
+    if(selectedFiles.length === 0){
+        statusBox.innerText = "请先在上方文件列表中选择要替换的文件";
+        statusBox.className = "status-box status-orange";
+        return;
+    }
+    const inputs = document.querySelectorAll('#replaceRows input[data-idx]');
+    const fmtId = s => {
+        const u = s.replace(/-/g, "").toUpperCase();
+        return u.length === 9 ? `${u.slice(0,3)}-${u.slice(3,6)}-${u.slice(6)}` : u;
+    };
+    const batch = [];
+    const bad = [];
+    selectedFiles.forEach((f, i) => {
+        const raw = inputs[i] ? inputs[i].value.trim() : "";
+        if(!raw){
+            bad.push(`${f.name}：未填写新ID`);
+            return;
+        }
+        const std = fmtId(raw);
+        if(!/^[0-9A-Z]{9}$/.test(std.replace(/-/g,""))){
+            bad.push(`${f.name}：ID格式不正确`);
+            return;
+        }
+        batch.push({name: f.name, handle: f.handle, newid: std});
+    });
+    if(bad.length > 0){
+        statusBox.innerText = `❌ ${bad.join("；")}`;
+        statusBox.className = "status-box status-red";
+        return;
+    }
+    const okList = [], failList = [];
+    for(const item of batch){
+        try{
+            const rawBuf = await readBcdFile(item.handle);
+            const binStr = bytesToStr(rawBuf); // 1:1无损，不经过UTF-8
+            const ids = extractIds(binStr);
+            if(ids.length === 0){
+                failList.push(`${item.name}：未识别到关卡ID`);
+                continue;
+            }
+            let replaced = false;
+            const newBinStr = binStr.replace(ID_REG, (match)=>{
+                if(!replaced){
+                    replaced = true;
+                    return match.includes("-") ? item.newid : item.newid.replace(/-/g,"");
+                }
+                return match;
+            });
+            await writeBcdFile(item.handle, strToBytes(newBinStr));
+            okList.push(`${item.name} → ${item.newid}（原：${ids[0]}）`);
+        }catch(err){
+            failList.push(`${item.name}：${err.message}`);
+        }
+    }
+    if(okList.length > 0){
+        previewBox.innerText = `✅ 替换完成：\n${okList.join("\n")}`;
+    }
+    if(failList.length > 0){
+        statusBox.innerText = `⚠️ 成功 ${okList.length} 个，失败 ${failList.length} 个：${failList.join("；")}`;
+        statusBox.className = "status-box status-orange";
+    }else{
+        statusBox.innerText = `✅ 已替换 ${okList.length} 个文件`;
+        statusBox.className = "status-box status-green flash-ok";
+    }
+}
+
+function clearEditPanel() {
+    if(taskRunning){
+        statusBox.innerText = "⏳ 任务进行中，暂不能清空编辑面板";
+        statusBox.className = "status-box status-orange";
+        return;
+    }
+    gameDirHandle = null;
+    bcdFileHandles = [];
+    selectedFiles = [];
+    folderPathText.value = "";
+    bcdFileList.innerHTML = "<p class='empty-text'>暂无bcd文件</p>";
+    document.getElementById('replaceRows').innerHTML = '<div class="replace-hint" style="color:#999;">未选中任何文件</div>';
+    previewBox.innerText = "替换结果将显示在此处";
+    folderTip.innerText = "未选择文件夹，无法读取bcd文件";
+}
 </script>
 </body>
 </html>

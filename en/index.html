@@ -5,57 +5,89 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SMM2 Level & Player Lookup</title>
 <style>
-*{font-family:system-ui, -apple-system, Helvetica Rounded, sans-serif;box-sizing:border-box;margin:0;padding:0;}
-body{background:linear-gradient(140deg,#ff3c38,#ffc107);min-height:100vh;padding:24px 16px;display:flex;justify-content:center;}
-.card{backdrop-filter:blur(10px);background:rgba(255,255,255,0.94);border-radius:24px;width:100%;max-width:640px;padding:20px 24px;}
-h1{font-size:24px;font-weight:bold;color:#dc2626;text-align:center;margin-bottom:8px;}
-.sub-desc{text-align:center;color:#666;font-size:14px;margin-bottom:16px;}
-.status-box{margin-bottom:16px;padding:12px 16px;border-radius:12px;background:#fef3c7;color:#92400e;text-align:center;font-size:14px;}
+*{font-family:system-ui, -apple-system, "Helvetica Rounded", "Microsoft YaHei", sans-serif;box-sizing:border-box;margin:0;padding:0;}
+body{
+    background:
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,0.85) 0, rgba(255,255,255,0) 10%),
+        radial-gradient(circle at 88% 12%, rgba(255,255,255,0.7) 0, rgba(255,255,255,0) 8%),
+        radial-gradient(circle at 75% 65%, rgba(255,255,255,0.55) 0, rgba(255,255,255,0) 7%),
+        radial-gradient(circle at 20% 82%, rgba(255,255,255,0.5) 0, rgba(255,255,255,0) 6%),
+        linear-gradient(180deg,#4dbdf5 0%,#9ddcf9 60%,#ffedb3 100%);
+    background-attachment:fixed;
+    min-height:100vh;padding:32px 16px;display:flex;justify-content:center;
+}
+.card{
+    background:rgba(255,255,255,0.97);
+    border:4px solid #1e2a4a;
+    border-radius:22px;
+    width:100%;max-width:640px;
+    padding:0 24px 24px;
+    overflow:hidden;
+    box-shadow:0 14px 40px rgba(13,48,84,0.35);
+}
+h1{
+    font-size:22px;font-weight:900;color:#fff;text-align:center;letter-spacing:1px;
+    margin:0 -24px;padding:16px 12px 13px;
+    background:linear-gradient(180deg,#ff6067,#dd3038);
+    text-shadow:0 2px 0 rgba(0,0,0,0.28);
+}
+.sub-desc{
+    text-align:center;color:#8a6b1f;font-size:13px;font-weight:600;
+    background:#ffe9a8;
+    margin:0 -24px 16px;padding:7px 12px;
+    border-bottom:3px solid #f3d36b;
+}
+.status-box{margin-bottom:16px;padding:12px 16px;border-radius:12px;background:#fef3c7;color:#92400e;text-align:center;font-size:14px;font-weight:600;}
 .status-green{background:#dcfce7;color:#166534;}
 .status-orange{background:#ffedd5;color:#9a3412;}
 .status-red{background:#fee2e2;color:#b91c1c;}
-.details-wrap{margin-bottom:20px;background:#f3f4f6;border-radius:12px;padding:12px;}
-details summary{font-weight:500;color:#444;cursor:pointer;}
-textarea{width:100%;margin-top:12px;padding:10px;border:1px solid #ddd;border-radius:8px;resize:none;min-height:80px;}
+.status-blue{background:#dbeafe;color:#1e40af;}
+.details-wrap{margin-bottom:20px;background:#f2f6fb;border:1px solid #dbe6f3;border-radius:14px;padding:12px;}
+details summary{font-weight:700;color:#1e2a4a;cursor:pointer;}
+details summary::marker{color:#dd3038;}
+details summary:hover{color:#dd3038;}
+textarea{width:100%;margin-top:12px;padding:10px 12px;border:2px solid #cdd8e6;border-radius:10px;resize:none;min-height:80px;font-size:14px;background:#fbfdff;}
+textarea:focus{border-color:#f5a623;box-shadow:0 0 0 3px rgba(245,166,35,0.22);outline:none;}
 .btn-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
-.btn-red{background:#ef4444;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;text-decoration:none;display:inline-block;}
-.btn-red:hover{background:#dc2626;}
-.btn-amber{background:#f59e0b;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;flex:1;}
-.btn-amber:hover{background:#d97706;}
-.btn-blue{background:#3b82f6;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;flex:1;}
-.btn-blue:hover{background:#2563eb;}
-.btn-gray{background:#e5e7eb;color:#333;border:none;padding:8px 12px;border-radius:8px;font-size:14px;cursor:pointer;}
-.btn-gray:hover{background:#d1d5db;}
-.btn-long{width:100%;background:#ffffff;color:#222;border:1px solid #ddd;padding:10px;border-radius:8px;font-size:15px;cursor:pointer;margin-top:18px;}
-.btn-long:hover{background:#f7f7f7;}
-.block-title{font-weight:500;color:#333;margin-bottom:8px;font-size:16px;}
-.gray-box{background:#f3f4f6;border-radius:12px;padding:16px;min-height:70px;margin-bottom:20px;}
+.btn-red{background:linear-gradient(180deg,#ff6b6b,#e0343a);color:#fff;border:none;padding:9px 14px;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;box-shadow:0 3px 0 #a11f26;text-shadow:0 1px 0 rgba(0,0,0,0.2);}
+.btn-red:hover{filter:brightness(1.08);}
+.btn-red:active{transform:translateY(2px);box-shadow:0 1px 0 #a11f26;}
+.btn-amber{background:linear-gradient(180deg,#ffc23e,#f59e0b);color:#fff;border:none;padding:9px 14px;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;flex:1;box-shadow:0 3px 0 #b9720a;text-shadow:0 1px 0 rgba(0,0,0,0.2);}
+.btn-amber:hover{filter:brightness(1.08);}
+.btn-amber:active{transform:translateY(2px);box-shadow:0 1px 0 #b9720a;}
+.btn-blue{background:linear-gradient(180deg,#5cadff,#2f7df6);color:#fff;border:none;padding:9px 14px;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;flex:1;box-shadow:0 3px 0 #1d5cc0;text-shadow:0 1px 0 rgba(0,0,0,0.2);}
+.btn-blue:hover{filter:brightness(1.08);}
+.btn-blue:active{transform:translateY(2px);box-shadow:0 1px 0 #1d5cc0;}
+.btn-gray{background:linear-gradient(180deg,#f4f6f9,#e2e8f1);color:#333;border:1.5px solid #c9d4e2;padding:8px 12px;border-radius:999px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 3px 0 #c2cddc;}
+.btn-gray:hover{filter:brightness(1.04);}
+.btn-gray:active{transform:translateY(2px);box-shadow:0 1px 0 #c2cddc;}
+.btn-long{width:100%;background:linear-gradient(180deg,#ffffff,#eef3f9);color:#1e2a4a;border:2px solid #1e2a4a;padding:11px;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;margin-top:18px;box-shadow:0 3px 0 #1e2a4a;}
+.btn-long:hover{background:linear-gradient(180deg,#fff8e6,#ffefc2);}
+.btn-long:active{transform:translateY(2px);box-shadow:0 1px 0 #1e2a4a;}
+.block-title{font-weight:800;color:#1e2a4a;margin-bottom:8px;font-size:15px;}
+.gray-box{background:#f2f6fb;border:1px solid #dbe6f3;border-radius:14px;padding:14px;min-height:70px;margin-bottom:20px;overflow:hidden;}
 #historyBox{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-    gap:10px;
     background:transparent;
+    border:none;
+    padding:0;
 }
-.empty-text{color:#999;font-size:14px;}
-.id-item{background:white;border:1px solid #ddd;border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-.id-tag{font-family:"Consolas",monospace;letter-spacing:1px;font-weight:bold;color:#dc2626;}
-.info-card{border-left:4px solid #ef4444;background:#f3f4f6;border-radius:0 12px 12px 0;padding:16px;line-height:1.7;max-height:60vh;overflow-y:auto;}
+.empty-text{color:#9aa7b8;font-size:14px;text-align:center;padding:20px 0;}
+.info-card{border-left:5px solid #e0343a;background:#fff8ec;border-radius:0 12px 12px 0;padding:14px 16px;line-height:1.7;max-height:60vh;overflow-y:auto;}
 .api-hidden{display:none;}
 .history-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-.clear-his{font-size:12px;color:#dc2626;border:none;background:transparent;cursor:pointer;}
-.history-item{background:white;border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;}
-.his-text{font-family:"Consolas",monospace;color:#444;cursor:pointer;}
+.clear-his{font-size:12px;color:#dd3038;border:none;background:transparent;cursor:pointer;font-weight:700;}
+.clear-his:hover{text-decoration:underline;}
 .flash-ok{animation:flashGreen 0.6s ease;}
 @keyframes flashGreen{0%{background:#bbf7d0}100%{background:transparent}}
-.link-text{color:#2563eb;text-decoration:none;}
+.link-text{color:#2563eb;text-decoration:none;font-weight:600;}
 .link-text:hover{text-decoration:underline;}
 .user-input-row{display:flex;gap:8px;align-items:center;margin-top:12px;}
 #userInfoWrap{margin-bottom:20px;display:none;}
-input{flex:1;border:1px solid #ddd;border-radius:8px;padding:8px 12px;outline:none;}
-input:focus{border-color:#f59e0b;}
-.list-item{margin:4px 0;padding:4px;border-bottom:1px #ddd dashed;}
-hr{border:none;border-top:1px #ccc solid;margin:12px 0;}
-.tip-small{font-size:12px;color:#777;margin-top:6px;text-align:center;}
+input{flex:1;border:2px solid #cdd8e6;border-radius:10px;padding:8px 12px;outline:none;font-size:14px;background:#fbfdff;}
+input:focus{border-color:#f5a623;box-shadow:0 0 0 3px rgba(245,166,35,0.22);}
+.list-item{margin:4px 0;padding:6px 4px;border-bottom:1px #e2e8f0 dashed;}
+hr{border:none;border-top:2px dashed #dbe6f3;margin:12px 0;}
+.tip-small{font-size:12px;color:#7c8899;margin-top:6px;text-align:center;}
 .check-line{
     display:inline-flex;
     align-items:center;
@@ -66,50 +98,146 @@ hr{border:none;border-top:1px #ccc solid;margin:12px 0;}
     justify-content:center;
 }
 .check-line input[type="checkbox"]{
-    width:16px;
-    height:16px;
-    flex:none;
-    margin:0;
+    width:16px;height:16px;flex:none;margin:0;accent-color:#e0343a;
 }
-.check-line label{
-    flex:none;
-}
+.check-line label{flex:none;cursor:pointer;}
 .batch-tips{
+    font-size:12px;color:#66707d;margin:8px 0 0;line-height:1.7;background:none;box-shadow:none;border:none;padding:0;
+}
+.diff-row{display:flex;flex-wrap:wrap;gap:10px 16px;justify-content:center;margin:10px 0;}
+.diff-item{display:flex;align-items:center;gap:4px;cursor:pointer;}
+.diff-item input[type="radio"]{accent-color:#e0343a;}
+/* ===== Table styles ===== */
+.table-wrap{
+    width:100%;
+    overflow-x:auto;
+}
+.data-table{
+    width:100%;
+    border-collapse: collapse;
+    background:#fff;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 0 0 1px #dbe6f3;
+}
+.data-table th, .data-table td{
+    padding:10px 12px;
+    border-bottom:1px solid #edf2f8;
+    font-size:14px;
+}
+.data-table th{
+    background:#1e2a4a;
+    font-weight:700;
+    color:#fff;
+    text-align:left;
+    font-size:13px;
+    letter-spacing:0.5px;
+}
+.data-table tr:last-child td{
+    border-bottom:none;
+}
+.data-table tbody tr:nth-child(even){
+    background:#f7fafd;
+}
+.data-table tbody tr:hover{
+    background:#fdf3dd;
+}
+.id-tag{
+    font-family:"Consolas",monospace;
+    letter-spacing:1px;
+    font-weight:bold;
+    color:#e0343a;
+    background:#fdecec;
+    padding:2px 8px;
+    border-radius:6px;
+}
+.his-text{
+    font-family:"Consolas",monospace;
+    color:#1e2a4a;
+    font-weight:600;
+    cursor:pointer;
+}
+.his-text:hover{
+    color:#e0343a;
+}
+.table-btn{
+    border:none;background:transparent;
     font-size:12px;
-    color:#666;
-    margin:8px 0 0;
-    line-height:1.6;
-    background:none;
-    box-shadow:none;
-    border:none;
-    padding:0;
+    font-weight:700;
+    cursor:pointer;
+    padding:2px 6px;
 }
-.diff-row{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px 16px;
-    justify-content:center;
-    margin:10px 0;
-}
-.diff-item{
-    display:flex;
-    align-items:center;
-    gap:4px;
+.btn-qry{color:#2f7df6;}
+.btn-qry:hover{text-decoration:underline;}
+.btn-del{color:#dd3038;}
+.btn-del:hover{text-decoration:underline;}
+.btn-fill{background:#2f7df6;color:#fff;border:none;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 2px 0 #1d5cc0;}
+.btn-fill:active{transform:translateY(1px);box-shadow:none;}
+.btn-detail{background:#e0343a;color:#fff;border:none;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 2px 0 #a11f26;}
+.btn-detail:active{transform:translateY(1px);box-shadow:none;}
+/* Emulator file editing module styles */
+.folder-row{display:flex;gap:8px;align-items:center;margin-top:10px;}
+.replace-row{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap;}
+.num-input{width:80px;flex:none;}
+.file-list{max-height:200px;overflow-y:auto;margin-top:10px;background:#fff;padding:8px;border-radius:10px;border:1.5px solid #dbe6f3;}
+.file-item{padding:5px 8px;border-bottom:1px #eef2f7 dashed;font-size:13px;cursor:pointer;font-family:"Consolas",monospace;border-radius:6px;margin:1px 0;}
+.file-item:hover{background:#fff4dd;}
+.file-item.selected{background:#fde68a;font-weight:bold;box-shadow:inset 3px 0 0 #e0343a;}
+.replace-hint{font-size:12px;color:#66707d;margin-bottom:6px;}
+#replaceRows .replace-row{display:flex;align-items:center;gap:6px;background:#fff7ed;border:1px solid #fcd34d;border-radius:8px;padding:6px 8px;margin-bottom:6px;}
+.replace-preview{margin-top:10px;padding:12px;background:#141d33;color:#cfe0ff;border-radius:10px;border:1px solid #2b3a5e;white-space:pre-wrap;font-family:"Consolas",monospace;font-size:12px;max-height:150px;overflow-y:auto;}
+.warning-text{color:#b91c1c;font-size:13px;margin-top:6px;}
+@media (max-width:480px){
+    .card{padding:0 14px 16px;}
+    h1,.sub-desc{margin:0 -14px;}
+    h1{font-size:19px;}
 }
 </style>
 </head>
 <body>
 <div class="card">
 <h1>SMM2 Level & Player Lookup</h1>
-<p class="sub-desc">Download *.bcd files & fetch full data instantly</p>
+<p class="sub-desc">Downloadable *.bcd, one-click data lookup | Emulator local BCD batch editing</p>
 <div id="statusBox" class="status-box">
-Enter ID then click Search or press Enter
+Enter ID then click Query or press Enter
 </div>
+
+<!-- 【New】Emulator local file batch replace module -->
+<div class="details-wrap">
+<details>
+<summary>Emulator BCD Batch File Editing (folder read/write permission required)</summary>
+<div class="warning-text">⚠️ Chrome/Edge only. Must be opened locally or on an HTTPS domain. Grant folder permission before editing BCD files; back up files before editing</div>
+
+<div class="folder-row">
+    <input id="folderPathText" readonly placeholder="Selected folder path" style="flex:1;">
+    <button onclick="selectGameFolder()" class="btn-blue">Select emulator folder</button>
+</div>
+<p class="tip-small" id="folderTip">No folder selected, cannot read BCD files</p>
+
+<div class="file-list" id="bcdFileList">
+    <p class="empty-text">No BCD files</p>
+</div>
+
+<hr>
+<p class="block-title">Replace level files</p>
+<div class="replace-hint">Click files in the list above to select save files (multi-select supported, click again to deselect). Each selected file gets a row; fill in each new ID then click Replace:</div>
+<div id="replaceRows"><div class="replace-hint" style="color:#999;">No file selected</div></div>
+<div class="replace-row" style="margin-top:10px;">
+    <button onclick="executeMultiReplace()" class="btn-red" style="flex:1">Replace selected files</button>
+</div>
+<div class="replace-preview" id="previewBox">Replace results shown here</div>
+<p class="warning-text" style="margin-top:8px;">⚠️ Overwrites original files directly, back up before editing!</p>
+<div class="btn-row" style="margin-top:12px;">
+    <button onclick="clearEditPanel()" class="btn-gray" style="flex:1">Clear Editor</button>
+</div>
+</details>
+</div>
+
 <div class="details-wrap">
 <details open>
-<summary>Player Search</summary>
+<summary>Player Lookup</summary>
 <div class="user-input-row">
-<input id="makerInput" type="text" placeholder="Enter Player ID">
+<input id="makerInput" type="text" placeholder="Enter Maker ID">
 <button onclick="searchUser()" class="btn-blue">Search Player</button>
 <button onclick="clearUserInput()" class="btn-gray">Clear</button>
 </div>
@@ -121,82 +249,82 @@ Enter ID then click Search or press Enter
 </div>
 <div class="details-wrap">
 <details open>
-<summary>Level ID Input / Paste Clipboard</summary>
-<textarea id="textSource" rows="3" placeholder="Paste full ID XXX-XXX-XXX or 9-digit string"></textarea>
+<summary>Level Input / Paste from Clipboard</summary>
+<textarea id="textSource" rows="3" placeholder="Paste full level ID XXX-XXX-XXX or 9-char code"></textarea>
 <div class="btn-row">
-<button onclick="scanAllText()" class="btn-amber">Lookup All IDs</button>
+<button onclick="scanAllText()" class="btn-amber">Run Query</button>
 <button onclick="pasteClipboard()" class="btn-blue">Paste Clipboard</button>
 </div>
-<button onclick="clearTextarea()" class="btn-gray" style="width:100%;margin-top:12px;">Clear Textbox</button>
-<button onclick="getRandomFiveLevels()" class="btn-long">Random Level Pool</button>
-<p class="tip-small">Pull one random level (downloadable)</p>
+<button onclick="clearTextarea()" class="btn-gray" style="width:100%;margin-top:12px;">Clear</button>
+<button onclick="getRandomFiveLevels()" class="btn-long">Random Level</button>
+<p class="tip-small">Randomly pick one level (downloadable)</p>
+<!-- All checked removed,Default unchecked -->
 <div class="check-line">
-<input type="checkbox" id="autoOpenTabCheck" checked>
-<label for="autoOpenTabCheck">Auto download after random pull</label>
+<input type="checkbox" id="autoOpenTabCheck">
+<label for="autoOpenTabCheck">Download after picking</label>
+</div>
+<div class="check-line">
+<input type="checkbox" id="replaceSaveCheck">
+<label for="replaceSaveCheck">Replace selected save files above</label>
 </div>
 <div class="check-line">
 <input type="checkbox" id="batch10Check">
-<label for="batch10Check">Auto download 10 random levels</label>
+<label for="batch10Check">Random 10</label>
 </div>
 <div class="check-line">
 <input type="checkbox" id="batch100Check">
-<label for="batch100Check">Experimental: Download 100 levels</label>
+<label for="batch100Check">Experimental: Download 100</label>
 </div>
-
 <hr>
-<p class="block-title">Random Level Difficulty Filter</p>
+<p class="block-title">Random level difficulty filter</p>
 <div class="diff-row">
     <div class="diff-item">
         <input type="radio" name="diffSel" id="diffAll" value="-1" checked>
-        <label for="diffAll">All Difficulties</label>
+        <label for="diffAll">All random</label>
     </div>
     <div class="diff-item">
-        <input type="radio" name="diffSel" id="diff0" value="0">
+        <input type="radio" name="diffSel" id="diff0" value="e">
         <label for="diff0">Easy</label>
     </div>
     <div class="diff-item">
-        <input type="radio" name="diffSel" id="diff1" value="1">
+        <input type="radio" name="diffSel" id="diff1" value="n">
         <label for="diff1">Normal</label>
     </div>
     <div class="diff-item">
-        <input type="radio" name="diffSel" id="diff2" value="2">
+        <input type="radio" name="diffSel" id="diff2" value="ex">
         <label for="diff2">Hard</label>
     </div>
     <div class="diff-item">
-        <input type="radio" name="diffSel" id="diff3" value="3">
-        <label for="diff3">Expert</label>
-    </div>
-    <div class="diff-item">
-        <input type="radio" name="diffSel" id="diff4" value="4">
+        <input type="radio" name="diffSel" id="diff4" value="sex">
         <label for="diff4">Super Expert</label>
     </div>
 </div>
-
 <p class="batch-tips">
-If downloaded file is .gz, extract and rename to .bcd<br>
-If no extension, manually add .bcd suffix<br>
-If auto-download fails, save file manually<br>
-Experimental 100-level note: Split into 10 batches with random 15–21s delay to deduplicate; after collecting all IDs, download sequentially with 6.5s gap to avoid API rate limit<br>
-Batch rename tool: 1. Open <a href="https://rename.tools/zh/app" target="_blank">https://rename.tools/zh/app</a> 2. Add rule → Append extension → Enter bcd → Import folder (only target files inside) → Execute rename
+Files downloaded via "Random Level" are already decompressed in memory and saved directly as ready-to-use .bcd files, no extraction or renaming needed<br>
+Files downloaded via the "Level File Download" button: if .gz, decompress and rename to .bcd; if no extension, rename to .bcd; if the download does not start, save manually<br>
+About the experimental feature: downloading 100 collects in 10 rounds with random 5-6.5s intervals for deduplication; after collection, downloads serially, one .bcd every 6.5s, to avoid API rate limiting<br>
+One-click add .bcd extension: 1.Open<a href="https://rename.tools/zh/app" target="_blank">https://rename.tools/zh/app</a> 2.Click Add Rule-Add/Insert-Extension-Add Text-Position: End-Enter bcd-Execute Rename
 </p>
 </details>
 </div>
+<!-- IDs to Query as table area -->
 <div>
-<p class="block-title">Pending IDs to Look Up</p>
-<div id="resultBox" class="gray-box">
-<p class="empty-text">No valid IDs detected</p>
+<p class="block-title">IDs to Query</p>
+<div id="resultBox" class="gray-box table-wrap">
+<p class="empty-text">No IDs recognized</p>
 </div>
 <div id="apiInfoWrap" class="api-hidden">
 <p class="block-title">📊 Level Details</p>
 <div id="apiInfoBox" class="info-card"></div>
 </div>
+<!-- Query History as table area -->
 <div style="margin-top:20px;">
 <div class="history-head">
-<p class="block-title">Search History</p>
+<p class="block-title">Query History</p>
 <button onclick="clearAllHistory()" class="clear-his">Clear All</button>
 </div>
-<div id="historyBox" class="gray-box">
-<p class="empty-text">No history records</p>
+<div id="historyBox" class="gray-box table-wrap">
+<p class="empty-text">No records</p>
 </div>
 </div>
 </div>
@@ -213,7 +341,11 @@ const THUMB_URL = API_BASE + "/level_entire_thumbnail";
 const LEVEL_DATA = "https://tgrcode.com/mm2/level_data";
 const SEARCH_ENDLESS = API_BASE + "/search_endless_mode";
 const ID_REG = /[0-9A-Z]{9}|[0-9A-Z]{3}-[0-9A-Z]{3}-[0-9A-Z]{3}/gi;
-let history = JSON.parse(localStorage.getItem("smm2_query_history")) || [];
+let history = [];
+try{
+    const saved = JSON.parse(localStorage.getItem("smm2_query_history"));
+    if(Array.isArray(saved)) history = saved;
+}catch(e){}
 const textSource = document.getElementById('textSource');
 const makerInput = document.getElementById('makerInput');
 const resultBox = document.getElementById('resultBox');
@@ -224,26 +356,50 @@ const userInfoBox = document.getElementById("userInfoBox");
 const historyBox = document.getElementById('historyBox');
 const statusBox = document.getElementById('statusBox');
 const autoOpenTabCheck = document.getElementById('autoOpenTabCheck');
+const replaceSaveCheck = document.getElementById('replaceSaveCheck');
 const batch10Check = document.getElementById('batch10Check');
 const batch100Check = document.getElementById('batch100Check');
+
+// ===================== Emulator file editing global variables =====================
+let gameDirHandle = null; // Folder permission handle
+let bcdFileHandles = []; // All bcd File handles
+const folderPathText = document.getElementById('folderPathText');
+const folderTip = document.getElementById('folderTip');
+const bcdFileList = document.getElementById('bcdFileList');
+let selectedFiles = []; // Multi-select file handle list [{name, handle}]
+const previewBox = document.getElementById('previewBox');
+let taskRunning = false; // Re-entrancy guard: reject starting again while collecting/replacing
+function esc(s) {
+    return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+// New: batch 10/100 mutual exclusion logic
+batch10Check.addEventListener('change', function(){
+    if(this.checked) batch100Check.checked = false;
+});
+batch100Check.addEventListener('change', function(){
+    if(this.checked) batch10Check.checked = false;
+});
 renderHistory();
+
+// ===================== Original clipboard, Query function unchanged =====================
 async function pasteClipboard() {
     try {
         const clipText = await navigator.clipboard.readText();
         textSource.value = clipText;
         statusBox.className = "status-box status-green";
-        statusBox.innerText = "✅ Clipboard content loaded";
+        statusBox.innerText = "✅ Clipboard content read";
     } catch (e) {
         statusBox.className = "status-box status-red";
-        statusBox.innerText = "❌ Failed to read clipboard, paste manually";
+        statusBox.innerText = "❌ Failed to read clipboard, please paste manually";
     }
 }
 function clearTextarea() {
     textSource.value = "";
-    resultBox.innerHTML = "<p class='empty-text'>No valid IDs detected</p>";
+    resultBox.innerHTML = "<p class='empty-text'>No IDs recognized</p>";
     apiInfoWrap.classList.add("api-hidden");
     statusBox.className = "status-box";
-    statusBox.innerText = "Enter ID then click Search or press Enter";
+    statusBox.innerText = "Enter ID then click Query or press Enter";
 }
 function clearUserInput() {
     makerInput.value = "";
@@ -252,10 +408,9 @@ function clearUserInput() {
 function scanAllText() {
     const raw = textSource.value;
     let ids = extractIds(raw);
-    ids = ids.slice(0,5);
     renderResult(ids);
     if (ids.length > 0) {
-        statusBox.innerText = `🎉 Detected ${ids.length} IDs, loading first one`;
+        statusBox.innerText = `🎉 Found ${ids.length} IDs, querying the first one`;
         statusBox.className = "status-box status-green flash-ok";
         fetchLevelInfo(ids[0]);
         saveHistory(ids[0]);
@@ -272,51 +427,197 @@ function extractIds(text) {
         return up.length === 9 ? `${up.slice(0,3)}-${up.slice(3,6)}-${up.slice(6)}` : up;
     }))];
 }
+// IDs to Query as table
 function renderResult(ids) {
     if (!ids || ids.length === 0) {
-        resultBox.innerHTML = "<p class='empty-text'>No valid IDs detected</p>";
+        resultBox.innerHTML = "<p class='empty-text'>No IDs recognized</p>";
         return;
     }
-    let html = "";
+    let html = `
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Level ID</th>
+                <th>Operation</th>
+            </tr>
+        </thead>
+        <tbody>
+    `;
     ids.forEach(id => {
         html += `
-        <div class="id-item">
-            <span class="id-tag">${id}</span>
-            <div class="btn-row" style="margin-top:0;">
-                <button onclick="fetchLevelInfo('${id}')" class="btn-red" style="padding:4px 8px;font-size:12px;">View Details</button>
-                <button onclick="fillText('${id}')" class="btn-blue" style="padding:4px 8px;">Fill Input Box</button>
-            </div>`;
+        <tr>
+            <td><span class="id-tag">${id}</span></td>
+            <td>
+                <button onclick="fetchLevelInfo('${id}')" class="btn-detail">View Details</button>
+                <button onclick="fillText('${id}')" class="btn-fill">Fill Input</button>
+            </td>
+        </tr>
+        `;
     });
+    html += `</tbody></table>`;
     resultBox.innerHTML = html;
 }
 function fillText(id) {
     textSource.value = id;
 }
-async function downloadQueue(idList) {
-    for(const fullId of idList){
-        const pure = fullId.replace(/-/g, "");
-        window.open(`${LEVEL_DATA}/${pure}`, "_blank");
-        await new Promise(resolve => setTimeout(resolve, 6500));
+/**
+ * Now uses fetch + Blob + <a download> to trigger downloads: programmatic clicks on an
+ * anchor with the download attribute are not popups, immune to popup blocking after
+ * user-activation timeout, no browser popup whitelist needed
+ */
+async function saveBlobAs(data, filename) {
+    const blob = new Blob([data], {type: "application/octet-stream"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+}
+async function downloadLevelFile(fullId) {
+    const pure = fullId.replace(/-/g, "");
+    let res;
+    try{
+        res = await fetch(`${LEVEL_DATA}/${pure}`);
+    }catch(err){
+        throw new Error("Network error");
     }
+    if(res.status === 429) throw new Error("429 rate limited");
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const buf = new Uint8Array(await res.arrayBuffer());
+    let data = buf;
+    const isGzip = buf.length > 2 && buf[0] === 0x1F && buf[1] === 0x8B;
+    const isZlib = buf.length > 2 && buf[0] === 0x78 && (buf[1] === 0x01 || buf[1] === 0x5E || buf[1] === 0x9C || buf[1] === 0xDA);
+    if(isGzip || isZlib){
+        // Decompressed in memory, so the saved file is a ready-to-use .bcd, no manual rename needed
+        try{ data = await inflateBytes(buf, isGzip ? "gzip" : "deflate"); }catch(e){ data = buf; }
+    }
+    await saveBlobAs(data, `${pure}.bcd`);
+}
+async function downloadQueue(idList) {
+    const failList = [];
+    for(let i = 0; i < idList.length; i++){
+        const fullId = idList[i];
+        let done = false;
+        for(let retry = 0; retry < 3 && !done; retry++){
+            try{
+                statusBox.innerText = `⏳ Downloading ${i+1}/${idList.length}: ${fullId}${retry > 0 ? ` (retry #${retry+1})` : ""}`;
+                await downloadLevelFile(fullId);
+                done = true;
+            }catch(err){
+                if(retry < 2){
+                    statusBox.innerText = `⚠️ ${fullId} failed: ${err.message}, retrying in 10s...`;
+                    await new Promise(r=>setTimeout(r, 10000));
+                }else{
+                    failList.push(`${fullId}: ${err.message}`);
+                }
+            }
+        }
+        if(i < idList.length - 1) await new Promise(resolve => setTimeout(resolve, 6500));
+    }
+    if(failList.length > 0){
+        statusBox.innerText = `⚠️ Downloads finished, ${idList.length - failList.length}/${idList.length} succeeded, failed: ${failList.join("; ")}`;
+        statusBox.className = "status-box status-orange";
+    }else{
+        statusBox.innerText = `✅ All ${idList.length} levels downloaded as .bcd files`;
+        statusBox.className = "status-box status-green flash-ok";
+    }
+}
+
+/**
+ * Download level data and overwrite selected save bcd file
+ * Format detection:① gziparchive(1F 8B) ② zlibarchive(78 01/5E/9C/DA) ③ Uncompressed raw data
+ * After decompression, write as raw binary(Without text encoding, lossless)
+ */
+async function downloadAndReplaceSave(courseId, target) {
+    const pure = courseId.replace(/-/g, "");
+    if(!target){
+        throw new Error("Target file not specified");
+    }
+    statusBox.innerText = `⏳ Downloading ${courseId} Level Data...`;
+    let res;
+    try{
+        res = await fetch(`${LEVEL_DATA}/${pure}`);
+    }catch(err){
+        throw new Error("Download failed,Check network connection");
+    }
+    if(!res.ok) throw new Error(`Download failed HTTP ${res.status}`);
+    const buf = new Uint8Array(await res.arrayBuffer());
+    let data = buf;
+    let mode = "";
+    const isGzip = buf.length > 2 && buf[0] === 0x1F && buf[1] === 0x8B;
+    const isZlib = buf.length > 2 && buf[0] === 0x78 && (buf[1] === 0x01 || buf[1] === 0x5E || buf[1] === 0x9C || buf[1] === 0xDA);
+    if(isGzip){
+        data = await inflateBytes(buf, "gzip");
+        mode = "gzArchive decompressed";
+    }else if(isZlib){
+        data = await inflateBytes(buf, "deflate");
+        mode = "zlibArchive decompressed";
+    }else{
+        mode = "Uncompressed data used directly";
+    }
+    if(!data || data.length === 0){
+        throw new Error("Download content is empty");
+    }
+    const binStr = bytesToStr(data);
+    const ids = extractIds(binStr);
+    if(ids.length > 0){
+        mode += `,FoundID:${ids[0]}`;
+    }else{
+        mode += ",No level ID recognized(Format may be special)";
+    }
+    // Save file fixed at 368KB(376,832bytes),Validation result
+    const STD = 368 * 1024;
+    const sizeKb = (data.length / 1024).toFixed(1);
+    const ratio = data.length / STD;
+    if(Math.abs(ratio - 1) <= 0.03){
+        mode += `,${sizeKb}KB ✅ matches standard 368KB save`;
+    }else{
+        mode += `,${sizeKb}KB ❌ does not match standard 368KB(${ratio.toFixed(2)}x)——Data may not be correctly decompressed or format differs,Send this number to me for troubleshooting`;
+    }
+    await writeBcdFile(target.handle, data);
+    return `${mode}:${target.name} ← ${courseId}`;
 }
 function getRandomWait(){
     const min = 5000;
-    const max = 11000;
+    const max = 6500;
     return Math.floor(Math.random() * (max - min) + min);
 }
 async function getRandomFiveLevels() {
-    statusBox.innerText = "⏳ Start fetching levels";
+    if(taskRunning){
+        statusBox.innerText = "⏳ A task is still running, please wait for it to finish";
+        statusBox.className = "status-box status-orange";
+        return;
+    }
+    if(replaceSaveCheck.checked && selectedFiles.length === 0){
+        statusBox.innerText = "❌ \"Replace selected save files above\" is checked but no file is selected: pick save files in the list above first, or uncheck it";
+        statusBox.className = "status-box status-red";
+        return;
+    }
+    taskRunning = true;
+    try{
+        await getRandomFiveLevelsCore();
+    }finally{
+        taskRunning = false;
+    }
+}
+async function getRandomFiveLevelsCore() {
+    statusBox.innerText = "⏳ Collecting levels";
     statusBox.className = "status-box status-orange";
     const diffRadio = document.querySelector('input[name="diffSel"]:checked');
     const selectedDiff = diffRadio.value;
-    let fetchUrl = SEARCH_ENDLESS;
-    if (selectedDiff !== "-1") {
-        fetchUrl += `?diff=${selectedDiff}`;
-    }
+    let fetchUrl = selectedDiff === "-1" ? SEARCH_ENDLESS : SEARCH_ENDLESS + `?difficulty=${selectedDiff}`;
     const uniqueIds = new Set();
     let totalBatch = 1;
     let maxPick = 1;
-    if(batch100Check.checked){
+    if(replaceSaveCheck.checked && selectedFiles.length > 0){
+        // Replace mode:Auto-batch by selected file count,10 per batchLevel,5-6s between batches
+        maxPick = selectedFiles.length;
+        totalBatch = Math.ceil(maxPick / 10);
+        statusBox.innerText = `📦 Selected ${selectedFiles.length} file(s), need ${totalBatch} batches (10 per batch, 5-6s intervals)`;
+    }else if(batch100Check.checked){
         totalBatch = 10;
         maxPick = 100;
     }else if(batch10Check.checked){
@@ -329,12 +630,12 @@ async function getRandomFiveLevels() {
         try{
             const res = await fetch(fetchUrl);
             if(res.status === 429){
-                statusBox.innerText = `Batch ${batch} hit rate limit, stopped. Collected ${uniqueIds.size} unique levels`;
+                statusBox.innerText = `Batch ${batch} hit rate limit, stopping collection, collected ${uniqueIds.size} IDs`;
                 statusBox.className = "status-box status-red";
                 stopFlag = true;
                 break;
             }
-            if(!res.ok) throw new Error("API request failed");
+            if(!res.ok) throw new Error("API error");
             const data = await res.json();
             const list = data.courses || [];
             list.forEach(item=>{
@@ -342,15 +643,15 @@ async function getRandomFiveLevels() {
                 const fmt = `${raw.slice(0,3)}-${raw.slice(3,6)}-${raw.slice(6)}`;
                 uniqueIds.add(fmt);
             });
-            statusBox.innerText = `Batch ${batch} finished, unique levels collected: ${uniqueIds.size}`;
+            statusBox.innerText = `Batch ${batch} done, ${uniqueIds.size} unique`;
             if(batch < totalBatch){
                 const waitMs = getRandomWait();
                 const sec = (waitMs / 1000).toFixed(1);
-                statusBox.innerText += `, wait ${sec}s for next batch`;
+                statusBox.innerText += `, waiting ${sec}s for next batch`;
                 await new Promise(r=>setTimeout(r, waitMs));
             }
         }catch(err){
-            statusBox.innerText = `Batch ${batch} error: ${err.message}, fetch stopped`;
+            statusBox.innerText = `Batch ${batch} error: ${err.message}, stopping`;
             statusBox.className = "status-box status-red";
             stopFlag = true;
             break;
@@ -359,12 +660,68 @@ async function getRandomFiveLevels() {
     let picked = Array.from(uniqueIds).slice(0, maxPick);
     textSource.value = picked.join("\n");
     scanAllText();
-    statusBox.innerText = `✅ Fetch complete, total ${picked.length} level IDs`;
+    statusBox.innerText = `✅ Collection done, ${picked.length} level IDs`;
     statusBox.className = "status-box status-green flash-ok";
-    if(autoOpenTabCheck.checked || batch10Check.checked || batch100Check.checked){
-        statusBox.innerText = `⏳ Starting sequential download, 6.5s gap per file`;
+    if(autoOpenTabCheck.checked){
+        statusBox.innerText = `⏳ Collection done, waiting 6.5s before serial download (1 every 6.5s, saved as .bcd directly)`;
+        await new Promise(r=>setTimeout(r, 6500));
         await downloadQueue(picked);
-        statusBox.innerText = `✅ All download links triggered`;
+    }
+    if(replaceSaveCheck.checked){
+        if(picked.length === 0){
+            statusBox.innerText = "⚠️ No levels fetched,Cannot replace save";
+            statusBox.className = "status-box status-orange";
+            return;
+        }
+        if(selectedFiles.length === 0){
+            statusBox.innerText = "❌ No save file selected,Please select folder and click files above first";
+            statusBox.className = "status-box status-red";
+            return;
+        }
+        const total = selectedFiles.length;
+        const okList = [], failList = [];
+        statusBox.innerText = `⏳ Collection done (${picked.length} levels), waiting 6.5s before download & replace for ${total} file(s)...`;
+        statusBox.className = "status-box status-blue";
+        await new Promise(r=>setTimeout(r, 6500));
+        for(let i = 0; i < total; i++){
+            const t = selectedFiles[i];
+            const lvl = picked[i % picked.length]; // Loop-reuse if not enough fetched
+            let success = false;
+            for(let retry = 0; retry < 3 && !success; retry++){
+                try{
+                    if(retry > 0){
+                        statusBox.innerText = `🔄 [${i+1}/${total}] ${t.name} ← ${lvl},retry #${retry+1}...`;
+                        await new Promise(r=>setTimeout(r, 6500));
+                    }else{
+                        statusBox.innerText = `⏳ [${i+1}/${total}] ${t.name} ← ${lvl},Downloading and replacing...`;
+                    }
+                    statusBox.className = "status-box status-blue";
+                    const msg = await downloadAndReplaceSave(lvl, t);
+                    okList.push(msg);
+                    success = true;
+                }catch(err){
+                    if(retry < 2){
+                        statusBox.innerText = `⚠️ [${i+1}/${total}] ${t.name} failed:${err.message},retrying in 6.5s...`;
+                        await new Promise(r=>setTimeout(r, 6500));
+                    }else{
+                        failList.push(`${t.name}:${err.message}(failed after 3 retries)`);
+                    }
+                }
+            }
+            if(i < total - 1){
+                statusBox.innerText = `⏳ [${i+1}/${total}] done, waiting 6.5s for next...`;
+                await new Promise(r=>setTimeout(r, 6500));
+            }
+        }
+        if(failList.length > 0){
+            statusBox.innerText = `⚠️ Success ${okList.length}/${total},Failed ${failList.length}:${failList.join(";")}`;
+            statusBox.className = "status-box status-orange";
+            previewBox.innerText = `Replace results:\n${okList.concat(failList).join("\n")}`;
+        }else{
+            statusBox.innerText = `✅ All replacements done ${okList.length}/${total}`;
+            statusBox.className = "status-box status-green flash-ok";
+            previewBox.innerText = okList.join("\n");
+        }
     }
 }
 async function fetchLevelInfo(courseId) {
@@ -373,59 +730,59 @@ async function fetchLevelInfo(courseId) {
         const res = await fetch(`${LEVEL_INFO}/${pureId}`);
         if (res.status === 429) {
             apiInfoWrap.classList.remove("api-hidden");
-            apiInfoBox.innerHTML = `<p style="color:#dc2626;">429 Rate limited, retry later</p>`;
+            apiInfoBox.innerHTML = `<p style="color:#dc2626;">429 rate limited, wait before querying again</p>`;
             return;
         }
-        if (!res.ok) throw new Error("request error");
+        if (!res.ok) throw new Error("err");
         const data = await res.json();
         apiInfoWrap.classList.remove("api-hidden");
         const fullImgUrl = `${THUMB_URL}/${pureId}`;
         const gzDownloadUrl = `${LEVEL_DATA}/${pureId}`;
         apiInfoBox.innerHTML = `
-        <p><span style="font-weight:bold;">Level ID:</span> ${courseId}</p>
-        <p><span style="font-weight:bold;">Level Name:</span> ${data.name || "No Name"}</p>
-        <p><span style="font-weight:bold;">Creator ID:</span> ${data.maker_id || "No Data"}</p>
-        <p><span style="font-weight:bold;">Total Plays:</span> ${data.courses_played || "No Data"}</p>
-        <p><span style="font-weight:bold;">Likes / Boos:</span> ${data.likes || 0} / ${data.dislikes || 0}</p>
-        <p><span style="font-weight:bold;">Clear Rate:</span> ${data.clear_rate ? data.clear_rate + "%" : "No Data"}</p>
-        <p><span style="font-weight:bold;">Versus Stats:</span> Total Matches ${data.battle_total || "No Data"}, Wins ${data.battle_win || "No Data"}</p>
-        <p><span style="font-weight:bold;">Full World Thumbnail:</span><a href="${fullImgUrl}" target="_blank" class="link-text">${fullImgUrl}</a></p>
+        <p><span style="font-weight:bold;">Level ID:</span>${courseId}</p>
+        <p><span style="font-weight:bold;">Level Name:</span>${esc(data.name || "No name")}</p>
+        <p><span style="font-weight:bold;">Player ID:</span>${data.maker_id || "No data"}</p>
+        <p><span style="font-weight:bold;">Total Plays:</span>${data.courses_played || "No data"}</p>
+        <p><span style="font-weight:bold;">Likes / Boos:</span>${data.likes || 0} / ${data.dislikes || 0}</p>
+        <p><span style="font-weight:bold;">Clear Rate:</span>${data.clear_rate ? data.clear_rate + "%" : "No data"}</p>
+        <p><span style="font-weight:bold;">Versus Data:</span>Total Matches ${data.battle_total || "No data"},Wins ${data.battle_win || "No data"}</p>
+        <p><span style="font-weight:bold;">Overworld Map:</span><a href="${fullImgUrl}" target="_blank" class="link-text">${fullImgUrl}</a></p>
         <hr>
         <p style="font-weight:bold;color:#222;text-align:center;">Beta Feature</p>
         <div style="margin:12px 0;text-align:center;">
-            <a href="${gzDownloadUrl}" target="_blank" class="btn-red">Download Level File</a>
+            <a href="${gzDownloadUrl}" target="_blank" class="btn-red">Level File Download</a>
         </div>
         <p style="font-size:13px;color:#777;line-height:1.6;">
-            ① Mac: Direct download, rename file suffix to .bcd<br>
-            ② Windows/Android: Extract .gz then rename to .bcd<br>
+            ❶ On Apple devices it downloads directly; manually rename the extension to .bcd<br>
+            ❷ On Windows/Android, download the .gz, decompress it and rename to .bcd<br>
         </p>
         `;
     } catch (err) {
         apiInfoWrap.classList.remove("api-hidden");
-        apiInfoBox.innerHTML = `<p style="color:#dc2626;">Too many requests / API broken / Network error</p>`;
+        apiInfoBox.innerHTML = `<p style="color:#dc2626;">Query too fast / API error / Network error</p>`;
     }
 }
 function renderCourseList(rawData) {
     const arr = Array.isArray(rawData) ? rawData : [];
-    if (arr.length === 0) return `<p><b>No data available</b></p>`;
+    if (arr.length === 0) return `<p><b>No data</b></p>`;
     let html = "";
     arr.forEach(item => {
         const cid = item.course_id ?? "Unknown ID";
-        const cName = item.name ?? "No Name";
+        const cName = item.name ?? "No name";
         const clike = item.likes ?? 0;
-        const clearRate = item.clear_rate_pretty ?? "N/A";
-        html += `<div class="list-item">ID: ${cid} | Name: ${cName} | Likes: ${clike} | Clear Rate: ${clearRate}</div>`;
+        const clearRate = item.clear_rate_pretty ?? "None";
+        html += `<div class="list-item">ID:${esc(cid)} | Name:${esc(cName)} | Likes:${esc(clike)} | Clear Rate:${esc(clearRate)}</div>`;
     });
     return html;
 }
 async function searchUser() {
     let mid = makerInput.value.trim().toUpperCase();
     if (!mid) {
-        statusBox.innerText = "⚠️ Please input a Player ID";
+        statusBox.innerText = "⚠️ Please enter Maker ID";
         statusBox.className = "status-box status-orange";
         return;
     }
-    statusBox.innerText = "⏳ Loading full player data";
+    statusBox.innerText = "⏳ Loading all player data";
     statusBox.className = "status-box status-orange";
     userInfoWrap.style.display = "block";
     let userData = null;
@@ -437,7 +794,7 @@ async function searchUser() {
     try {
         const r1 = await fetch(`${USER_INFO}/${mid}`);
         if(r1.status === 429){
-            userInfoBox.innerHTML = `<p style="color:#dc2626;">429 Rate limit hit, retry later for player data</p>`;
+            userInfoBox.innerHTML = `<p style="color:#dc2626;">429 rate limited, try again later</p>`;
             return;
         }
         if (r1.ok) userData = await r1.json();
@@ -465,53 +822,53 @@ async function searchUser() {
     let html = "";
     if (userData) {
         const miiImg = userData.mii_image ?? "None";
-        const uploadTotal = userData.uploaded_levels ?? "No Data";
+        const uploadTotal = userData.uploaded_levels ?? "No data";
         const makerPoint = userData.maker_points ?? 0;
-        const totalLike = userData.likes ?? "No Data";
-        const totalBoos = userData.boos ?? "No Data";
-        const totalPlay = userData.courses_played ?? "No Data";
-        const totalClear = userData.courses_cleared ?? "No Data";
-        const totalDeath = userData.courses_deaths ?? "No Data";
-        const versusRank = userData.versus_rank_name ?? "No Rank";
+        const totalLike = userData.likes ?? "No data";
+        const totalBoos = userData.boos ?? "No data";
+        const totalPlay = userData.courses_played ?? "No data";
+        const totalClear = userData.courses_cleared ?? "No data";
+        const totalDeath = userData.courses_deaths ?? "No data";
+        const versusRank = userData.versus_rank_name ?? "No rank";
         const totalBattle = Number(userData.versus_plays) || 0;
         const battleWin = Number(userData.versus_won) || 0;
         const battleLose = Number(userData.versus_lost) || 0;
         const winRate = totalBattle === 0 ? "0.00%" : ((battleWin / totalBattle) * 100).toFixed(2) + "%";
-        const avgClearRate = userData.total_clear_rate ? userData.total_clear_rate + "%" : "No Stats";
+        const avgClearRate = userData.total_clear_rate ? userData.total_clear_rate + "%" : "No stats";
         const wrCount = userData.world_records ?? 0;
         const firstClearCount = userData.first_clears ?? 0;
         html += `
-        <p><span style="font-weight:bold;">Player ID:</span> ${mid}</p>
-        <p><span style="font-weight:bold;">Player Name:</span> ${userData.name || "No Name"}</p>
-        <p><span style="font-weight:bold;">Mii Avatar:</span><a href="${miiImg}" target="_blank" class="link-text">${miiImg}</a></p>
-        <p><span style="font-weight:bold;">Published Levels:</span> ${uploadTotal}</p>
-        <p><span style="font-weight:bold;">Maker Points:</span> ${makerPoint}</p>
-        <p><span style="font-weight:bold;">Total Likes:</span> ${totalLike}</p>
-        <p><span style="font-weight:bold;">Total Boos:</span> ${totalBoos}</p>
-        <p><span style="font-weight:bold;">Total Plays:</span> ${totalPlay}</p>
-        <p><span style="font-weight:bold;">Total Clears:</span> ${totalClear}</p>
-        <p><span style="font-weight:bold;">Total Deaths:</span> ${totalDeath}</p>
-        <p><span style="font-weight:bold;">Versus Rank:</span> ${versusRank}</p>
-        <p><span style="font-weight:bold;">Total Versus Matches:</span> ${totalBattle}</p>
-        <p><span style="font-weight:bold;">Versus Wins:</span> ${battleWin}</p>
-        <p><span style="font-weight:bold;">Versus Losses:</span> ${battleLose}</p>
-        <p><span style="font-weight:bold;">Versus Win Rate:</span> ${winRate}</p>
-        <p><span style="font-weight:bold;">Global Average Clear Rate:</span> ${avgClearRate}</p>
-        <p><span style="font-weight:bold;">World Records Held:</span> ${wrCount}</p>
-        <p><span style="font-weight:bold;">First Clears Count:</span> ${firstClearCount}</p>
+        <p><span style="font-weight:bold;">Player ID:</span>${mid}</p>
+        <p><span style="font-weight:bold;">Player Name:</span>${esc(userData.name || "No name")}</p>
+        <p><span style="font-weight:bold;">Mii Avatar:</span>${/^https?:\/\//.test(miiImg) ? `<a href="${esc(miiImg)}" target="_blank" rel="noopener" class="link-text">${esc(miiImg)}</a>` : esc(miiImg)}</p>
+        <p><span style="font-weight:bold;">Total Uploaded Levels:</span>${uploadTotal}</p>
+        <p><span style="font-weight:bold;">Maker Points:</span>${makerPoint}</p>
+        <p><span style="font-weight:bold;">Total Likes:</span>${totalLike}</p>
+        <p><span style="font-weight:bold;">Total Boos:</span>${totalBoos}</p>
+        <p><span style="font-weight:bold;">Total Plays:</span>${totalPlay}</p>
+        <p><span style="font-weight:bold;">Total Clears:</span>${totalClear}</p>
+        <p><span style="font-weight:bold;">Total Deaths:</span>${totalDeath}</p>
+        <p><span style="font-weight:bold;">Versus Rank:</span>${versusRank}</p>
+        <p><span style="font-weight:bold;">Total Versus Matches:</span>${totalBattle}</p>
+        <p><span style="font-weight:bold;">Versus Wins:</span>${battleWin}</p>
+        <p><span style="font-weight:bold;">Versus Losses:</span>${battleLose}</p>
+        <p><span style="font-weight:bold;">Win Rate:</span>${winRate}</p>
+        <p><span style="font-weight:bold;">Avg Clear Rate:</span>${avgClearRate}</p>
+        <p><span style="font-weight:bold;">World Records:</span>${wrCount} </p>
+        <p><span style="font-weight:bold;">First Clears:</span>${firstClearCount} </p>
         <hr>
-        <p><b>Published Levels</b></p>${renderCourseList(postedList)}
+        <p><b>Uploaded Levels</b></p>${renderCourseList(postedList)}
         <hr>
         <p><b>Liked Levels</b></p>${renderCourseList(likedList)}
         <hr>
         <p><b>Played Levels</b></p>${renderCourseList(playedList)}
         <hr>
-        <p><b>First Cleared Levels</b></p>${renderCourseList(firstClearList)}
+        <p><b>First Cleared</b></p>${renderCourseList(firstClearList)}
         <hr>
         <p><b>World Record Levels</b></p>${renderCourseList(wrList)}
         `;
     } else {
-        html += `<p style="color:#c00;">Failed to load base player info</p><hr>`;
+        html += `<p style="color:#c00;">Failed to load player info</p><hr>`;
     }
     userInfoBox.innerHTML = html;
     statusBox.innerText = "✅ All player data loaded";
@@ -525,26 +882,39 @@ function saveHistory(id) {
         renderHistory();
     }
 }
+// History rendered as table
 function renderHistory() {
     if (history.length === 0) {
-        historyBox.innerHTML = "<p class='empty-text'>No history records</p>";
+        historyBox.innerHTML = "<p class='empty-text'>No records</p>";
         return;
     }
-    let html = "";
+    let html = `
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>History ID</th>
+                <th>Operation</th>
+            </tr>
+        </thead>
+        <tbody>
+    `;
     history.forEach(id => {
         html += `
-        <div class="history-item">
-            <span class="his-text" onclick="fillText('${id}')">${id}</span>
-            <div class="btn-row" style="margin-top:0;">
-                <button onclick="fetchLevelInfo('${id}')" style="font-size:12px;color:#3b82f6;background:transparent;border:none;cursor:pointer;">Lookup</button>
-                <button onclick="delSingleHistory('${id}')" style="font-size:12px;color:#dc2626;background:transparent;border:none;cursor:pointer;">Delete</button>
-            </div>`;
+        <tr>
+            <td><span class="his-text" onclick="fillText('${id}')">${id}</span></td>
+            <td>
+                <button onclick="fetchLevelInfo('${id}')" class="table-btn btn-qry">Query</button>
+                <button onclick="delSingleHistory('${id}')" class="table-btn btn-del">Delete</button>
+            </td>
+        </tr>
+        `;
     });
+    html += `</tbody></table>`;
     historyBox.innerHTML = html;
 }
 function delSingleHistory(id) {
     history = history.filter(i => i !== id);
-    localStorage.setItem("smm2_query_history");
+    localStorage.setItem("smm2_query_history", JSON.stringify(history));
     renderHistory();
 }
 function clearAllHistory() {
@@ -553,11 +923,298 @@ function clearAllHistory() {
     renderHistory();
 }
 textSource.addEventListener("keydown", e=>{
-    if(e.key === "Enter") scanAllText();
+    if(e.key === "Enter" && !e.shiftKey){
+        e.preventDefault();
+        scanAllText();
+    }
 })
 makerInput.addEventListener("keydown", e=>{
     if(e.key === "Enter") searchUser();
 })
+
+// ===================== New emulator file editing core functions =====================
+/**
+ * 1. Select Folder,Request read/write permission(File System Access API)
+ */
+async function selectGameFolder() {
+    try {
+        // Pop up folder picker,Request read/write permission
+        gameDirHandle = await window.showDirectoryPicker({
+            mode: "readwrite"
+        });
+        folderPathText.value = gameDirHandle.name;
+        folderTip.innerText = `Authorized folder: ${gameDirHandle.name}, scanning BCD files...`;
+        bcdFileHandles = [];
+        // Scan folder for.bcdFile
+        for await (const entry of gameDirHandle.values()) {
+            if (entry.kind === "file" && entry.name.toLowerCase().endsWith(".bcd")) {
+                bcdFileHandles.push(entry);
+            }
+        }
+        // Render file list
+        if(bcdFileHandles.length === 0){
+            bcdFileList.innerHTML = "<p class='empty-text'>No .bcd files found in folder</p>";
+        }else{
+            let html = "";
+            bcdFileHandles.forEach((f,i)=>{
+                html += `<div class="file-item" onclick="selectBcdFile(${i}, this)">${f.name}</div>`;
+            })
+            bcdFileList.innerHTML = html;
+            folderTip.innerText = `Read ${bcdFileHandles.length} BCD files. Click files for multi-select, then fill new IDs below`;
+        }
+        statusBox.innerText = "✅ Folder read/write permission granted";
+        statusBox.className = "status-box status-green flash-ok";
+    } catch(err){
+        gameDirHandle = null;
+        bcdFileHandles = [];
+        folderPathText.value = "";
+        bcdFileList.innerHTML = "<p class='empty-text'>No BCD files</p>";
+        if(err.name === "NotAllowedError"){
+            folderTip.innerText = "❌ Folder read/write permission denied, cannot edit files";
+        }else if(err.name === "AbortError"){
+            folderTip.innerText = "Selection cancelled, no folder chosen";
+            statusBox.className = "status-box";
+            statusBox.innerText = "Enter ID then click Query or press Enter";
+            return;
+        }else if(err.name === "NotFoundError"){
+            folderTip.innerText = "❌ No folder selected";
+        }else{
+            folderTip.innerText = `❌ Browser does not support the File System Access API (only newer Chrome/Edge support it): ${err.message}`;
+        }
+        statusBox.innerText = "Folder authorization failed";
+        statusBox.className = "status-box status-red";
+    }
+}
+
+/**
+ * 2. Binary lossless utilities:Byte array <-> 1:1Binary string(Never go through UTF-8,Prevent data corruption)
+ */
+function bytesToStr(buf) {
+    let s = "";
+    const CHUNK = 0x8000;
+    for(let i = 0; i < buf.length; i += CHUNK){
+        s += String.fromCharCode.apply(null, buf.subarray(i, i + CHUNK));
+    }
+    return s;
+}
+function strToBytes(s) {
+    const out = new Uint8Array(s.length);
+    for(let i = 0; i < s.length; i++) out[i] = s.charCodeAt(i) & 0xFF;
+    return out;
+}
+async function inflateBytes(buf, fmt) {
+    const ds = new DecompressionStream(fmt);
+    const stream = new Blob([buf]).stream().pipeThrough(ds);
+    const reader = stream.getReader();
+    const chunks = [];
+    let total = 0;
+    while(true){
+        const {done, value} = await reader.read();
+        if(done) break;
+        chunks.push(value);
+        total += value.length;
+    }
+    const out = new Uint8Array(total);
+    let off = 0;
+    for(const c of chunks){ out.set(c, off); off += c.length; }
+    return out;
+}
+
+/**
+ * 3. Read single bcd file raw bytes(Binary lossless)
+ */
+async function readBcdFile(fileHandle) {
+    const file = await fileHandle.getFile();
+    return new Uint8Array(await file.arrayBuffer());
+}
+
+/**
+ * 4. Write raw bytes to bcd file(Need write permission)
+ *    Take latest file snapshot before each write,Fall back to re-fetching handle from directory on failure,to avoid "Cache state mismatch" error
+ */
+async function writeBcdFile(fileHandle, data) {
+    // Try writing with current handle
+    try{
+        const writable = await fileHandle.createWritable();
+        await writable.write(data);
+        await writable.close();
+        return;
+    }catch(e){
+        // Handle may have expired,Proceed to re-fetch flow below
+    }
+    // Re-fetch fresh handle from authorized directory
+    if(!gameDirHandle){ throw new Error("Directory not authorized, cannot re-fetch file"); }
+    let fresh = null;
+    for await(const entry of gameDirHandle.values()){
+        if(entry.kind === "file" && entry.name === fileHandle.name){
+            fresh = entry;
+            break;
+        }
+    }
+    if(!fresh){ throw new Error(`Cannot re-fetch file handle:${fileHandle.name}`); }
+    const writable = await fresh.createWritable();
+    await writable.write(data);
+    await writable.close();
+    // Sync update bcdFileHandles corresponding entry,Prevent expiration next time
+    const i = bcdFileHandles.findIndex(f => f.name === fileHandle.name);
+    if(i >= 0) bcdFileHandles[i] = fresh;
+    const j = selectedFiles.findIndex(f => f.name === fileHandle.name);
+    if(j >= 0) selectedFiles[j].handle = fresh;
+}
+
+/**
+ * 4. Replace logic: specify Nth ID for global replace
+ */
+/**
+ * 4. Click file list to select target file(Must authorize folder + click to select file)
+ */
+/**
+ * 4. Click file list:Multi-select / deselect (click again to deselect),Each selection renders one row
+ */
+function selectBcdFile(index, el) {
+    const fh = bcdFileHandles[index];
+    if(!fh) return;
+    const i = selectedFiles.findIndex(f => f.name === fh.name);
+    if(i >= 0){
+        selectedFiles.splice(i, 1);
+        el.classList.remove('selected');
+    }else{
+        selectedFiles.push({name: fh.name, handle: fh});
+        el.classList.add('selected');
+    }
+    renderReplaceRows();
+}
+
+/**
+ * 5. Render each row: File name + New ID input
+ */
+function renderReplaceRows() {
+    const box = document.getElementById('replaceRows');
+    if(selectedFiles.length === 0){
+        box.innerHTML = '<div class="replace-hint" style="color:#999;">No file selected</div>';
+        previewBox.innerText = "Click files in the list above to select save files";
+        return;
+    }
+    const oldVals = {};
+    box.querySelectorAll('input[data-name]').forEach(inp => {
+        oldVals[inp.dataset.name] = inp.value;
+    });
+    let html = "";
+    selectedFiles.forEach((f, i) => {
+        const savedVal = Object.prototype.hasOwnProperty.call(oldVals, f.name) ? esc(oldVals[f.name]) : "";
+        html += `<div class="replace-row">`
+              + `<span style="font-family:Consolas;font-size:13px;">${esc(f.name)}</span>`
+              + `<span style="color:#666;font-size:12px;">→ New ID:</span>`
+              + `<input data-idx="${i}" data-name="${esc(f.name)}" value="${savedVal}" placeholder="XXX-XXX-XXX or 9-char" style="flex:1;min-width:140px;">`
+              + `</div>`;
+    });
+    box.innerHTML = html;
+    previewBox.innerText = `${selectedFiles.length} file(s) selected, fill new ID in each row then click "Replace selected files"`;
+}
+
+/**
+ * 6. Batch replace:Each selected file replaced with its row new ID and overwritten
+ */
+async function executeMultiReplace() {
+    if(taskRunning){
+        statusBox.innerText = "⏳ A task is still running, please wait for it to finish";
+        statusBox.className = "status-box status-orange";
+        return;
+    }
+    taskRunning = true;
+    try{
+        await executeMultiReplaceCore();
+    }finally{
+        taskRunning = false;
+    }
+}
+async function executeMultiReplaceCore() {
+    if(!gameDirHandle || bcdFileHandles.length === 0){
+        statusBox.innerText = "Please select emulator folder and grant read/write permission";
+        statusBox.className = "status-box status-orange";
+        return;
+    }
+    if(selectedFiles.length === 0){
+        statusBox.innerText = "Please select file(s) from the list above first";
+        statusBox.className = "status-box status-orange";
+        return;
+    }
+    const inputs = document.querySelectorAll('#replaceRows input[data-idx]');
+    const fmtId = s => {
+        const u = s.replace(/-/g, "").toUpperCase();
+        return u.length === 9 ? `${u.slice(0,3)}-${u.slice(3,6)}-${u.slice(6)}` : u;
+    };
+    const batch = [];
+    const bad = [];
+    selectedFiles.forEach((f, i) => {
+        const raw = inputs[i] ? inputs[i].value.trim() : "";
+        if(!raw){
+            bad.push(`${f.name}:New ID not filled`);
+            return;
+        }
+        const std = fmtId(raw);
+        if(!/^[0-9A-Z]{9}$/.test(std.replace(/-/g,""))){
+            bad.push(`${f.name}:IDInvalid format`);
+            return;
+        }
+        batch.push({name: f.name, handle: f.handle, newid: std});
+    });
+    if(bad.length > 0){
+        statusBox.innerText = `❌ ${bad.join(";")}`;
+        statusBox.className = "status-box status-red";
+        return;
+    }
+    const okList = [], failList = [];
+    for(const item of batch){
+        try{
+            const rawBuf = await readBcdFile(item.handle);
+            const binStr = bytesToStr(rawBuf); // 1:1lossless,Without UTF-8
+            const ids = extractIds(binStr);
+            if(ids.length === 0){
+                failList.push(`${item.name}:No level ID recognized`);
+                continue;
+            }
+            let replaced = false;
+            const newBinStr = binStr.replace(ID_REG, (match)=>{
+                if(!replaced){
+                    replaced = true;
+                    return match.includes("-") ? item.newid : item.newid.replace(/-/g,"");
+                }
+                return match;
+            });
+            await writeBcdFile(item.handle, strToBytes(newBinStr));
+            okList.push(`${item.name} → ${item.newid}(Original:${ids[0]})`);
+        }catch(err){
+            failList.push(`${item.name}:${err.message}`);
+        }
+    }
+    if(okList.length > 0){
+        previewBox.innerText = `✅ Replace done:\n${okList.join("\n")}`;
+    }
+    if(failList.length > 0){
+        statusBox.innerText = `⚠️ Success ${okList.length}  ,Failed ${failList.length}  :${failList.join(";")}`;
+        statusBox.className = "status-box status-orange";
+    }else{
+        statusBox.innerText = `✅ Replaced ${okList.length} file(s)`;
+        statusBox.className = "status-box status-green flash-ok";
+    }
+}
+
+function clearEditPanel() {
+    if(taskRunning){
+        statusBox.innerText = "⏳ A task is running, cannot clear the editor now";
+        statusBox.className = "status-box status-orange";
+        return;
+    }
+    gameDirHandle = null;
+    bcdFileHandles = [];
+    selectedFiles = [];
+    folderPathText.value = "";
+    bcdFileList.innerHTML = "<p class='empty-text'>No BCD files</p>";
+    document.getElementById('replaceRows').innerHTML = '<div class="replace-hint" style="color:#999;">No file selected</div>';
+    previewBox.innerText = "Replace results shown here";
+    folderTip.innerText = "No folder selected, cannot read BCD files";
+}
 </script>
 </body>
 </html>
